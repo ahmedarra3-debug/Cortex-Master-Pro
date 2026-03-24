@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cortex Master Studio | Professional V1.2.0</title>
+    <title>Cortex Master Studio | Universal V1.3.0</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
@@ -23,7 +23,7 @@
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         select, textarea, input { width: 100%; background: #020617; border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 8px; font-size: 13px; outline: none; font-family: 'Cairo'; }
         .tooltip-info { position: fixed; bottom: 30px; right: 510px; width: 320px; background: var(--gold); color: #000; padding: 15px; border-radius: 12px; font-size: 13px; font-weight: bold; display: none; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .btn-launch { background: linear-gradient(135deg, var(--accent), #2563eb); color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-launch { background: linear-gradient(135deg, var(--accent), #2563eb); color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
         .main-stage { flex: 1; display: flex; flex-direction: column; background: #000; position: relative; }
         #chat-window { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 25px; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); }
         .msg { padding: 20px; border-radius: 18px; max-width: 85%; line-height: 1.8; white-space: pre-wrap; font-size: 15px; position: relative; }
@@ -32,6 +32,7 @@
         .preview-box { width: 100%; height: 120px; background: #000; border-radius: 8px; margin-top: 10px; overflow: hidden; display: none; border: 1px solid var(--accent); }
         .preview-box img { width: 100%; height: 100%; object-fit: contain; }
         .chat-input-container { padding: 25px; background: var(--panel); border-top: 1px solid var(--border); display: flex; gap: 15px; }
+        .btn-update { background: var(--border); color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; }
         .copy-btn { background: var(--gold); border: none; padding: 5px 10px; border-radius: 5px; font-size: 10px; cursor: pointer; position: absolute; top: 10px; left: 10px; }
     </style>
 </head>
@@ -41,8 +42,8 @@
 
 <aside class="sidebar">
     <div class="brand">
-        <h2><i class="fas fa-microchip"></i> CORTEX MASTER</h2>
-        <small style="color: var(--gold); letter-spacing: 2px;">V1.2.0 PROFESSIONAL</small>
+        <h2><i class="fas fa-globe"></i> CORTEX UNIVERSAL</h2>
+        <small style="color: var(--gold); letter-spacing: 2px;">V1.3.0 EDITION</small>
     </div>
 
     <div class="mode-tabs">
@@ -50,7 +51,18 @@
         <button onclick="setMode('video')" id="v-btn" class="tab-btn">CINEMATOGRAPHY</button>
     </div>
 
-    <div class="group" onmouseover="showTip('القوالب الذكية تضبط العلوم البصرية فوراً لضمان جودة Petrojack.')" onmouseout="hideTip()">
+    <div class="group">
+        <div class="group-label"><i class="fas fa-layer-group"></i> Production Domain | مجال الإنتاج</div>
+        <select id="domainSelector">
+            <option value="industrial">الصناعي (Steel & Oil)</option>
+            <option value="agriculture">الزراعي (Green Gold)</option>
+            <option value="commercial">التجاري (Global Trade)</option>
+            <option value="real_estate">العقاري (Luxury Living)</option>
+            <option value="medical">الطبي (Cortex Health)</option>
+        </select>
+    </div>
+
+    <div class="group" onmouseover="showTip('القوالب الذكية تضبط العلوم البصرية بناءً على المجال المختار.')" onmouseout="hideTip()">
         <div class="group-label"><i class="fas fa-magic"></i> AI Style Presets</div>
         <select id="presetSelector" onchange="applyAIPreset()">
             <option value="custom">-- تخصيص يدوي --</option>
@@ -70,7 +82,7 @@
 
     <div class="group">
         <div class="group-label"><i class="fas fa-lightbulb"></i> Vision Concept</div>
-        <textarea id="conceptInput" rows="3" placeholder="اشرح الفكرة هنا..."></textarea>
+        <textarea id="conceptInput" rows="3" placeholder="اشرح الفكرة هنا (مثلاً: تصوير طماطم للتصدير أو عيادة أسنان فخمة)..."></textarea>
     </div>
 
     <button class="btn-launch" onclick="launchProduction()">إطلاق الإنتاج</button>
@@ -78,7 +90,7 @@
 
 <main class="main-stage">
     <div id="chat-window">
-        <div class="msg ai-msg">> النظام جاهز مخرج أحمد. اختر القالب وارفع المرجع لنبدأ.</div>
+        <div class="msg ai-msg">> النظام العالمي جاهز مخرج أحمد. اختر المجال وارفع المرجع لنبدأ.</div>
     </div>
     <div class="chat-input-container">
         <input type="text" id="chatInput" placeholder="اطلب تعديلاً..." onkeypress="if(event.key==='Enter') sendUpdate()">
@@ -115,7 +127,6 @@
         document.getElementById('p-btn').classList.toggle('active', m === 'photo');
         document.getElementById('v-btn').classList.toggle('active', m === 'video');
         renderControls();
-        // إعادة تطبيق الـ Preset لو تم اختياره مسبقاً
         if(document.getElementById('presetSelector').value !== 'custom') applyAIPreset();
     }
 
@@ -131,7 +142,7 @@
                 <select id="light"><option value="Rembrandt Lighting">Rembrandt</option><option value="Rim/Edge Lighting">Rim Light</option><option value="Volumetric Cinematic">Volumetric</option></select>
                 <select id="kelvin"><option value="5600K (Daylight)">5600K</option><option value="3200K (Warm)">3200K</option></select>
                 </div></div>
-                <div class="group"><div class="group-label">Composition</div><select id="bg"><option value="Adaptive Lab">Adaptive Lab</option></select><select id="color" style="margin-top:5px;"><option value="Teal & Orange">Teal & Orange</option><option value="Monochromatic Luxury">Monochrome</option></select></div>`;
+                <div class="group"><div class="group-label">Composition</div><select id="bg"><option value="Adaptive Studio">Adaptive Studio</option></select><select id="color" style="margin-top:5px;"><option value="Teal & Orange">Teal & Orange</option><option value="Monochromatic Luxury">Monochrome</option></select></div>`;
         } else {
             container.innerHTML = `<div class="group"><div class="group-label">Motion</div><select id="motion"><option value="Dolly Zoom">Dolly Zoom</option><option value="360 Orbital">Orbital</option></select></div>`;
         }
@@ -152,10 +163,13 @@
         const formData = new FormData();
         formData.append('isUpdate', 'false');
         formData.append('mode', mode);
+        // إرسال المجال المختار للسيرفر
+        formData.append('domain', document.getElementById('domainSelector').value);
         formData.append('concept', document.getElementById('conceptInput').value);
         if (document.getElementById('refImage').files[0]) formData.append('refImage', document.getElementById('refImage').files[0]);
         document.querySelectorAll('select').forEach(s => formData.append(s.id, s.value));
-        appendMsg("🚀 جارٍ معالجة العلوم البصرية...", "user-msg");
+        
+        appendMsg("🚀 جارٍ استحضار الرؤية العالمية للمجال المختار...", "user-msg");
         const res = await fetch('/produce', { method: 'POST', body: formData });
         const d = await res.json();
         appendMsg(d.reply, "ai-msg");
@@ -169,6 +183,8 @@
         const fd = new FormData();
         fd.append('isUpdate', 'true');
         fd.append('userUpdate', val);
+        // نرسل المجال أيضاً في التحديث لضمان استمرار السياق
+        fd.append('domain', document.getElementById('domainSelector').value);
         const res = await fetch('/produce', { method: 'POST', body: fd });
         const d = await res.json();
         appendMsg(d.reply, "ai-msg");
@@ -182,8 +198,8 @@
         if (c === 'ai-msg') {
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
-            btn.innerText = 'نسخ';
-            btn.onclick = () => { navigator.clipboard.writeText(t); btn.innerText = 'تم!'; };
+            btn.innerText = 'نسخ البرومبت';
+            btn.onclick = () => { navigator.clipboard.writeText(t); btn.innerText = 'تم النسخ!'; };
             d.appendChild(btn);
         }
         win.appendChild(d);

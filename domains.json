@@ -1,0 +1,27 @@
+{
+  "industrial": {
+    "label": "المحور الصناعي (Steel & Oil)",
+    "vision": "خبير في فيزياء المعادن والزيوت. ركز على اللزوجة واللمعان وقوة التروس. استخدم إضاءة Rembrandt، وعدسات Macro 100mm لتفاصيل الزيت، وزوايا Low-Angle لهيبة التانكات.",
+    "keywords": ["Viscosity", "Reflective Steel", "Heavy Machinery", "Precision Engineering"]
+  },
+  "agriculture": {
+    "label": "المحور الزراعي (Green Gold)",
+    "vision": "خبير في تصدير المحاصيل. ركز على نضارة الثمار (الطماطم) واتساع الأراضي. استخدم Drone Shots للـ 100 فدان، وإضاءة Golden Hour، وألوان حيوية.",
+    "keywords": ["Export Quality", "Drone Aerial", "Lush Harvest", "Farm-to-Table"]
+  },
+  "commercial": {
+    "label": "المحور التجاري (Global Trade)",
+    "vision": "خبير تسويق بصري. للأكل: ركز على شهية المنظر والبخار. للأجهزة: ركز على النعومة والحداثة. استخدم إضاءة High-Key ساطعة، وخلفيات Minimalist.",
+    "keywords": ["Product Lifestyle", "Sleek Aesthetics", "Vibrant Commercial", "Studio Lighting"]
+  },
+  "real_estate": {
+    "label": "المحور العقاري (Luxury Living)",
+    "vision": "خبير في العمارة والرفاهية. ركز على الاتساع والتشطيبات الفخمة. استخدم عدسات Ultra-Wide، وإضاءة Dusk (Twilight)، وتناظر هندسي.",
+    "keywords": ["Architectural Grandeur", "Interior Luxury", "Twilight Photography", "Modern Construction"]
+  },
+  "medical": {
+    "label": "المحور الطبي (Cortex Health)",
+    "vision": "خبير في الدقة الطبية وطب الأسنان. ركز على التعقيم وبريق الأدوات. للأسنان: ركز على ملمس الزرعات والسيراميك اللؤلؤي. استخدم إضاءة بيضاء معقمة وخلفيات Clean Blue.",
+    "keywords": ["Clinical Precision", "Dental Implants", "Sterile Environment", "Medical Technology"]
+  }
+}
