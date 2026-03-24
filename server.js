@@ -16,7 +16,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 app.use(express.json());
 app.use(express.static('public'));
 
-let projectHistory = [];
+let projectHistory = []; // الذاكرة المؤقتة للجلسة الحالية
 
 function buildInstructions(mode, domainKey, presetKey, motion) {
     const domain = domainsData[domainKey] || domainsData['industrial'];
@@ -29,28 +29,23 @@ function buildInstructions(mode, domainKey, presetKey, motion) {
 
 app.post('/produce', upload.single('refImage'), async (req, res) => {
     const data = req.body;
-    const mode = data.mode || 'photo';
-    const domain = data.domain || 'industrial';
-    const preset = data.preset || 'custom';
-    const motion = data.motion || 'none';
     const isUpdate = (data.isUpdate === "true");
-    const activeId = data.projectId; // استلام رقم المشروع لو موجود
+    let activeId = data.projectId; 
+    const currentInput = isUpdate ? data.userUpdate : data.concept;
 
     try {
-        const MASTER_INSTRUCTIONS = buildInstructions(mode, domain, preset, motion);
+        const MASTER_INSTRUCTIONS = buildInstructions(data.mode, data.domain, data.preset, data.motion);
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", systemInstruction: MASTER_INSTRUCTIONS });
-
-        let currentPrompt = isUpdate ? `تعديل: ${data.userUpdate}` : `مشروع جديد: ${data.concept}`;
 
         let result;
         if (req.file) {
             const imgBuffer = fs.readFileSync(req.file.path);
             const imgPart = [{ inlineData: { data: imgBuffer.toString("base64"), mimeType: req.file.mimetype } }];
-            result = await model.generateContent([currentPrompt, ...imgPart]);
+            result = await model.generateContent([`تعديل/فكرة: ${currentInput}`, ...imgPart]);
             fs.unlinkSync(req.file.path);
         } else {
             const chat = model.startChat({ history: projectHistory });
-            result = await chat.sendMessage(currentPrompt);
+            result = await chat.sendMessage(currentInput);
         }
 
         const creativeVision = result.response.text();
@@ -60,35 +55,49 @@ app.post('/produce', upload.single('refImage'), async (req, res) => {
         });
 
         const promptsOutput = techRes.choices[0].message.content;
-        const finalReply = creativeVision + "\n" + promptsOutput;
+        const finalReply = creativeVision + "\n\n" + promptsOutput;
 
-        // 🌟 المنطق الجديد: تحديث أم حفظ جديد؟
-        let savedId = activeId;
-        if (isUpdate && activeId) {
-            await db.updateProject(activeId, creativeVision, promptsOutput);
-            console.log(`✅ تم تحديث المشروع رقم ${activeId}`);
-        } else if (!isUpdate) {
-            savedId = await db.saveProject({
-                mode, domain, preset, motion, concept: data.concept,
-                vision_ar: creativeVision, prompts_en: promptsOutput
+        // 🌟 منطق "آلة الزمن" الجديد في v1.4.1
+        if (!isUpdate || !activeId) {
+            // 1. إنشاء مشروع جديد في جدول projects
+            activeId = await db.saveProject({
+                mode: data.mode, domain: data.domain, preset: data.preset, 
+                motion: data.motion, concept: data.concept
             });
-            console.log(`🆕 تم حفظ مشروع جديد برقم ${savedId}`);
+            console.log(`🆕 تم فتح مشروع جديد برقم: ${activeId}`);
         }
 
-        projectHistory.push({ role: "user", parts: [{ text: currentPrompt }] });
+        // 2. تسجيل "كلام المخرج" في سجل المحادثة
+        await db.addLog(activeId, 'user', currentInput);
+        
+        // 3. تسجيل "رد المكنة" في سجل المحادثة
+        await db.addLog(activeId, 'ai', finalReply);
+
+        // تحديث الذاكرة المؤقتة للجلسة
+        projectHistory.push({ role: "user", parts: [{ text: currentInput }] });
         projectHistory.push({ role: "model", parts: [{ text: finalReply }] });
 
-        // نرجع الـ ID للواجهة عشان تفضل فكراه
-        res.json({ success: true, reply: finalReply, projectId: savedId });
+        res.json({ success: true, reply: finalReply, projectId: activeId });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
+// جلب قائمة المشاريع
 app.get('/history', async (req, res) => {
     const projects = await db.getAllProjects();
     res.json({ success: true, projects });
 });
 
+// 🌟 مسار جديد: جلب شريط الذكريات الكامل لمشروع معين
+app.get('/project-history/:id', async (req, res) => {
+    try {
+        const logs = await db.getProjectHistory(req.params.id);
+        res.json({ success: true, logs });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 app.post('/reset', (req, res) => { projectHistory = []; res.json({ success: true }); });
-app.listen(3000, () => console.log("🚀 Cortex Engine v1.4.0 (Sync Memory) Ready"));
+app.listen(3000, () => console.log("🚀 Cortex Engine v1.4.1 (Time Machine) Activated"));
