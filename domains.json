@@ -1,52 +1,52 @@
 {
   "industrial": {
     "label": "المحور الصناعي (Manufacturing)",
-    "vision": "خبير في تصوير العمليات الشاقة والضخمة. ركز على قوة المعدن، حرارة المسبك، ولزوجة السوائل.",
+    "vision": "خبير في تصوير العمليات الشاقة والضخمة. ركز على قوة المعدن، حرارة المسبك، ولزوجة السوائل والزيوت الكيميائية.",
     "presets": {
-      "production_line": { "name": "خطوط الإنتاج", "lens": "35mm Cine-Lens", "aperture": "f/8", "light": "High-Contrast Industrial", "focus": "Repetition & Machinery flow" },
-      "foundry": { "name": "المسبك والمصانع", "lens": "50mm Prime", "aperture": "f/2.8", "light": "Molten Glow / Sparks", "focus": "Extreme Heat & Metal Glow" },
-      "viscous_flow": { "name": "السوائل اللزجة (زيوت)", "lens": "100mm f/2.8 Macro", "aperture": "f/1.2", "light": "Rim/Edge Lighting", "focus": "Viscosity & Texture of Liquids" },
-      "mega_structures": { "name": "المنشآت الضخمة", "lens": "16mm Ultra-Wide", "aperture": "f/11", "light": "Volumetric Sunlight", "focus": "Scale & Grandeur of Tanks" },
-      "metal_craft": { "name": "تشكيل المعادن واللحام", "lens": "85mm f/1.2", "aperture": "f/2.0", "light": "Dramatic Edge Light", "focus": "Welding Sparks & Steel Texture" }
+      "production_line": { "name": "خطوط الإنتاج", "lens": "35mm Cine-Lens", "light": "High-Contrast Industrial", "focus": "Repetition & Machinery flow" },
+      "foundry": { "name": "المسبك والمصانع", "lens": "50mm Prime", "light": "Molten Glow / Sparks", "focus": "Extreme Heat & Metal Glow" },
+      "viscous_flow": { "name": "السوائل اللزجة (زيوت)", "lens": "100mm f/2.8 Macro", "light": "Rim/Edge Lighting", "focus": "Viscosity & Texture of Liquids" },
+      "mega_structures": { "name": "المنشآت الضخمة", "lens": "16mm Ultra-Wide", "light": "Volumetric Sunlight", "focus": "Scale & Grandeur of Tanks" },
+      "metal_craft": { "name": "تشكيل المعادن واللحام", "lens": "85mm f/1.2", "light": "Dramatic Edge Light", "focus": "Welding Sparks & Steel Texture" }
     }
   },
   "commercial": {
     "label": "المحور التجاري (Commercial Studio)",
-    "vision": "خبير تسويق بصري. ركز على إظهار المنتج كبطل (Hero) باستخدام إضاءة الاستوديو الاحترافية.",
+    "vision": "خبير تسويق بصري للمنتجات. ركز على إظهار المنتج كبطل (Hero) باستخدام إضاءة الاستوديو الاحترافية والموك أب.",
     "presets": {
-      "ad_hero": { "name": "عرض احترافي (Ad-Hero)", "lens": "85mm f/1.2 Prime", "aperture": "f/1.2", "light": "Softbox & Rim Light", "focus": "Premium Product Branding" },
-      "digital_tech": { "name": "موبايلات وأجهزة", "lens": "100mm Macro", "aperture": "f/8", "light": "Sharp Specular Reflections", "focus": "Sleek Glass & Metal" },
-      "gourmet": { "name": "مطاعم وكافيهات", "lens": "50mm f/1.4", "aperture": "f/1.8", "light": "Warm Appetizing Light", "focus": "Steam, Freshness, & Color" },
-      "mockup": { "name": "موك اب (Mockup)", "lens": "50mm Flat Field", "aperture": "f/8", "light": "Neutral Studio", "focus": "Flat Lighting for Graphics" },
-      "product_edit": { "name": "تعديل إضاءة المنتج", "lens": "85mm", "aperture": "f/5.6", "light": "Three-Point Lighting", "focus": "Correcting Shadows & Highlights" },
-      "living_spaces": { "name": "أثاث وأجهزة منزلية", "lens": "24mm Wide Angle", "aperture": "f/4", "light": "Natural Lifestyle Light", "focus": "Living Space Integration" }
+      "ad_hero": { "name": "عرض احترافي (Ad-Hero)", "lens": "85mm f/1.2 Prime", "light": "Softbox & Rim Light", "focus": "Premium Product Branding" },
+      "digital_tech": { "name": "موبايلات وأجهزة", "lens": "100mm Macro", "light": "Sharp Specular Reflections", "focus": "Sleek Glass & Metal" },
+      "gourmet": { "name": "مطاعم وكافيهات", "lens": "50mm f/1.4", "light": "Warm Appetizing Light", "focus": "Steam, Freshness, & Color" },
+      "mockup": { "name": "موك اب (Mockup)", "lens": "50mm Flat Field", "light": "Neutral Studio", "focus": "Flat Lighting for Graphics" },
+      "product_edit": { "name": "تعديل إضاءة المنتج", "lens": "85mm", "light": "Three-Point Lighting", "focus": "Correcting Shadows & Highlights" },
+      "living_spaces": { "name": "أثاث وأجهزة منزلية", "lens": "24mm Wide Angle", "light": "Natural Lifestyle Light", "focus": "Living Space Integration" }
     }
   },
   "agriculture": {
     "label": "المحور الزراعي (Green Gold)",
-    "vision": "خبير في تصدير المحاصيل. ركز على نضارة الثمار (الطماطم) واتساع الأراضي.",
+    "vision": "خبير في تصدير المحاصيل الزراعية. ركز على نضارة الثمار (الطماطم) واتساع الأراضي الزراعية وجودة التعبئة.",
     "presets": {
-      "drone_survey": { "name": "مسح درون (100 فدان)", "lens": "Wide Drone Lens", "aperture": "f/5.6", "light": "Golden Hour", "focus": "Aerial Scale & Land Vastness" },
-      "export_quality": { "name": "جودة التصدير (Macro)", "lens": "100mm Macro", "aperture": "f/2.8", "light": "Natural Sunlight", "focus": "Freshness & Dew Drops" },
-      "greenhouse": { "name": "الصوبات الذكية", "lens": "35mm", "aperture": "f/4", "light": "Diffused Lab Light", "focus": "Agri-Tech & Controlled Environment" }
+      "drone_survey": { "name": "مسح درون (100 فدان)", "lens": "Wide Drone Lens", "light": "Golden Hour", "focus": "Aerial Scale & Land Vastness" },
+      "export_quality": { "name": "جودة التصدير (Macro)", "lens": "100mm Macro", "light": "Natural Sunlight", "focus": "Freshness & Dew Drops" },
+      "greenhouse": { "name": "الصوبات الذكية", "lens": "35mm", "light": "Diffused Lab Light", "focus": "Agri-Tech & Controlled Environment" }
     }
   },
   "real_estate": {
     "label": "المحور العقاري (Luxury Living)",
-    "vision": "خبير في العمارة والرفاهية. ركز على الاتساع والتشطيبات الفخمة.",
+    "vision": "خبير في العمارة والرفاهية. ركز على الاتساع والتشطيبات الفخمة والهياكل الخرسانية القوية.",
     "presets": {
-      "twilight": { "name": "ساعة الغروب (Twilight)", "lens": "17mm Wide", "aperture": "f/8", "light": "Warm Interior Glow", "focus": "Luxury Facades & Sunset" },
-      "interior": { "name": "التصميم الداخلي", "lens": "14mm Ultra-Wide", "aperture": "f/4", "light": "Soft Daylight", "focus": "Room Depth & Texture Details" },
-      "construction": { "name": "الإنشاءات والهياكل", "lens": "24mm", "aperture": "f/11", "light": "High Noon Contrast", "focus": "Strength of Steel & Concrete" }
+      "twilight": { "name": "ساعة الغروب (Twilight)", "lens": "17mm Wide", "light": "Warm Interior Glow", "focus": "Luxury Facades & Sunset" },
+      "interior": { "name": "التصميم الداخلي", "lens": "14mm Ultra-Wide", "light": "Soft Daylight", "focus": "Room Depth & Texture Details" },
+      "construction": { "name": "الإنشاءات والهياكل", "lens": "24mm", "light": "High Noon Contrast", "focus": "Strength of Steel & Concrete" }
     }
   },
   "medical": {
     "label": "المحور الطبي (Cortex Health)",
-    "vision": "خبير في الدقة الطبية وطب الأسنان. ركز على التعقيم وبريق الأدوات.",
+    "vision": "خبير في الدقة الطبية وطب الأسنان. ركز على التعقيم وبريق الأدوات والزرعات السنية الدقيقة.",
     "presets": {
-      "dental_macro": { "name": "زرعات الأسنان", "lens": "100mm Macro", "aperture": "f/16", "light": "Clinical Sterile White", "focus": "Ceramic Texture & Precision" },
-      "sterile_lab": { "name": "المختبر المعقم", "lens": "50mm", "aperture": "f/2.8", "light": "Cool Blue Tones", "focus": "Equipment Shine & Cleanliness" },
-      "trust_portrait": { "name": "بورتريه الطبيب", "lens": "85mm Prime", "aperture": "f/1.2", "light": "Soft Fill Light", "focus": "Confidence & Professionalism" }
+      "dental_macro": { "name": "زرعات الأسنان", "lens": "100mm Macro", "light": "Clinical Sterile White", "focus": "Ceramic Texture & Precision" },
+      "sterile_lab": { "name": "المختبر المعقم", "lens": "50mm", "light": "Cool Blue Tones", "focus": "Equipment Shine & Cleanliness" },
+      "trust_portrait": { "name": "بورتريه الطبيب", "lens": "85mm Prime", "light": "Soft Fill Light", "focus": "Confidence & Professionalism" }
     }
   }
 }
