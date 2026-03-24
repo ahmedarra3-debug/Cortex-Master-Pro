@@ -3,86 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cortex Master Studio | Universal V1.3.0</title>
+    <title>Cortex Master Studio | Universal v1.3.1</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #0ea5e9; --accent-hover: #0284c7; --gold: #f59e0b; --bg: #020617; --panel: #0f172a; --glass: rgba(30, 41, 59, 0.7); --border: #1e293b; }
-        * { box-sizing: border-box; }
+        :root { --accent: #0ea5e9; --gold: #f59e0b; --bg: #020617; --panel: #0f172a; --border: #1e293b; }
+        * { box-sizing: border-box; transition: 0.2s; }
         body { background: var(--bg); color: #f1f5f9; font-family: 'Cairo', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 480px; background: var(--panel); border-left: 1px solid var(--border); padding: 25px; overflow-y: auto; box-shadow: 10px 0 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 15px; }
-        .sidebar::-webkit-scrollbar { width: 5px; }
-        .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        .brand { text-align: center; margin-bottom: 10px; }
-        .brand h2 { color: var(--accent); font-weight: 700; margin: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .mode-tabs { display: flex; background: #000; padding: 5px; border-radius: 12px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: none; color: #94a3b8; cursor: pointer; border-radius: 8px; font-weight: bold; font-family: 'Cairo'; }
-        .tab-btn.active { background: var(--accent); color: #000; }
-        .group { border: 1px solid var(--border); border-radius: 14px; padding: 15px; background: var(--glass); position: relative; }
-        .group-label { font-size: 11px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .sidebar { width: 400px; background: var(--panel); border-left: 1px solid var(--border); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .brand { text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .brand h2 { color: var(--accent); margin: 0; }
+        .section-title { font-size: 10px; color: var(--gold); letter-spacing: 2px; font-weight: 800; margin-bottom: 5px; }
+        .group { border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: rgba(30, 41, 59, 0.4); }
+        .group-label { font-size: 12px; color: #fff; margin-bottom: 8px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         select, textarea, input { width: 100%; background: #020617; border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 8px; font-size: 13px; outline: none; font-family: 'Cairo'; }
-        .tooltip-info { position: fixed; bottom: 30px; right: 510px; width: 320px; background: var(--gold); color: #000; padding: 15px; border-radius: 12px; font-size: 13px; font-weight: bold; display: none; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .btn-launch { background: linear-gradient(135deg, var(--accent), #2563eb); color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        .main-stage { flex: 1; display: flex; flex-direction: column; background: #000; position: relative; }
-        #chat-window { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 25px; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); }
-        .msg { padding: 20px; border-radius: 18px; max-width: 85%; line-height: 1.8; white-space: pre-wrap; font-size: 15px; position: relative; }
-        .ai-msg { background: var(--glass); color: #e2e8f0; border-right: 5px solid var(--accent); align-self: flex-start; }
-        .user-msg { background: var(--accent); color: #000; align-self: flex-end; font-weight: bold; }
-        .preview-box { width: 100%; height: 120px; background: #000; border-radius: 8px; margin-top: 10px; overflow: hidden; display: none; border: 1px solid var(--accent); }
+        .btn-launch { background: linear-gradient(135deg, var(--accent), #2563eb); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: 800; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .main-stage { flex: 1; display: flex; flex-direction: column; background: #000; }
+        #chat-window { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; background: radial-gradient(circle at 50% 10%, #0f172a 0%, #020617 100%); }
+        .msg { padding: 18px; border-radius: 15px; max-width: 85%; line-height: 1.7; white-space: pre-wrap; font-size: 14.5px; position: relative; }
+        .ai-msg { background: rgba(15, 23, 42, 0.8); color: #e2e8f0; border-right: 4px solid var(--accent); align-self: flex-start; }
+        .user-msg { background: var(--accent); color: #000; align-self: flex-end; font-weight: 700; }
+        .preview-box { width: 100%; height: 100px; background: #000; border-radius: 6px; margin-top: 8px; display: none; border: 1px solid var(--accent); overflow: hidden; }
         .preview-box img { width: 100%; height: 100%; object-fit: contain; }
-        .chat-input-container { padding: 25px; background: var(--panel); border-top: 1px solid var(--border); display: flex; gap: 15px; }
-        .btn-update { background: var(--border); color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; }
-        .copy-btn { background: var(--gold); border: none; padding: 5px 10px; border-radius: 5px; font-size: 10px; cursor: pointer; position: absolute; top: 10px; left: 10px; }
+        .chat-input-container { padding: 20px; background: var(--panel); border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .copy-btn { background: var(--gold); border: none; padding: 4px 8px; border-radius: 4px; font-size: 9px; cursor: pointer; position: absolute; top: 10px; left: 10px; font-weight: 800; }
     </style>
 </head>
 <body>
 
-<div id="tooltip" class="tooltip-info"></div>
-
 <aside class="sidebar">
     <div class="brand">
-        <h2><i class="fas fa-globe"></i> CORTEX UNIVERSAL</h2>
-        <small style="color: var(--gold); letter-spacing: 2px;">V1.3.0 EDITION</small>
+        <h2><i class="fas fa-robot"></i> CORTEX</h2>
+        <small style="color: var(--gold);">UNIVERSAL v1.3.1</small>
     </div>
 
-    <div class="mode-tabs">
-        <button onclick="setMode('photo')" id="p-btn" class="tab-btn active">PHOTOGRAPHY</button>
-        <button onclick="setMode('video')" id="v-btn" class="tab-btn">CINEMATOGRAPHY</button>
+    <div>
+        <div class="section-title">01 / مشروع الإنتاج</div>
+        <div class="group">
+            <div class="group-label">المجال (Domain)</div>
+            <select id="domainSelector" onchange="syncPresets()">
+                <option value="industrial">الصناعي (Manufacturing)</option>
+                <option value="commercial">التجاري (Commercial Studio)</option>
+                <option value="agriculture">الزراعي (Green Gold)</option>
+                <option value="real_estate">العقاري (Luxury Living)</option>
+                <option value="medical">الطبي (Cortex Health)</option>
+            </select>
+        </div>
     </div>
 
-    <div class="group">
-        <div class="group-label"><i class="fas fa-layer-group"></i> Production Domain | مجال الإنتاج</div>
-        <select id="domainSelector">
-            <option value="industrial">الصناعي (Steel & Oil)</option>
-            <option value="agriculture">الزراعي (Green Gold)</option>
-            <option value="commercial">التجاري (Global Trade)</option>
-            <option value="real_estate">العقاري (Luxury Living)</option>
-            <option value="medical">الطبي (Cortex Health)</option>
-        </select>
+    <div>
+        <div class="section-title">02 / إعدادات الاستوديو</div>
+        <div class="group">
+            <div class="group-label">القوالب الذكية (Presets)</div>
+            <select id="presetSelector"></select>
+        </div>
     </div>
 
-    <div class="group" onmouseover="showTip('القوالب الذكية تضبط العلوم البصرية بناءً على المجال المختار.')" onmouseout="hideTip()">
-        <div class="group-label"><i class="fas fa-magic"></i> AI Style Presets</div>
-        <select id="presetSelector" onchange="applyAIPreset()">
-            <option value="custom">-- تخصيص يدوي --</option>
-            <option value="luxury_oil">الذهب السائل (Luxury Oil)</option>
-            <option value="industrial_lab">المختبر الصناعي (Lab)</option>
-            <option value="clean_commercial">إعلان تجاري</option>
-        </select>
-    </div>
-
-    <div class="group">
-        <div class="group-label"><i class="fas fa-camera-retro"></i> Image Reference</div>
-        <input type="file" id="refImage" accept="image/*" onchange="previewFile()">
-        <div id="previewBox" class="preview-box"></div>
-    </div>
-
-    <div id="controls-container"></div>
-
-    <div class="group">
-        <div class="group-label"><i class="fas fa-lightbulb"></i> Vision Concept</div>
-        <textarea id="conceptInput" rows="3" placeholder="اشرح الفكرة هنا (مثلاً: تصوير طماطم للتصدير أو عيادة أسنان فخمة)..."></textarea>
+    <div>
+        <div class="section-title">03 / الإدخال الإبداعي</div>
+        <div class="group">
+            <div class="group-label">الصورة المرجعية</div>
+            <input type="file" id="refImage" accept="image/*" onchange="previewFile()">
+            <div id="previewBox" class="preview-box"></div>
+        </div>
+        <div class="group" style="margin-top:10px;">
+            <div class="group-label">الفكرة (Concept)</div>
+            <textarea id="conceptInput" rows="3" placeholder="اشرح رؤيتك الفنية..."></textarea>
+        </div>
     </div>
 
     <button class="btn-launch" onclick="launchProduction()">إطلاق الإنتاج</button>
@@ -90,86 +77,44 @@
 
 <main class="main-stage">
     <div id="chat-window">
-        <div class="msg ai-msg">> النظام العالمي جاهز مخرج أحمد. اختر المجال وارفع المرجع لنبدأ.</div>
+        <div class="msg ai-msg">> النظام v1.3.1 جاهز. اختر المجال والقالب لنبدأ.</div>
     </div>
     <div class="chat-input-container">
-        <input type="text" id="chatInput" placeholder="اطلب تعديلاً..." onkeypress="if(event.key==='Enter') sendUpdate()">
-        <button onclick="sendUpdate()" class="btn-update">تعديل</button>
+        <input type="text" id="chatInput" style="flex:1" placeholder="اطلب تعديلاً..." onkeypress="if(event.key==='Enter') sendUpdate()">
+        <button onclick="sendUpdate()" style="background:var(--accent); border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:800">تحديث</button>
     </div>
 </main>
 
 <script>
-    const PRESET_DB = {
-        "luxury_oil": { lens: "100mm f/2.8 Macro", aperture: "f/1.2 (Extreme Bokeh)", light: "Rim/Edge Lighting", kelvin: "3200K (Warm)", color: "Monochromatic Luxury" },
-        "industrial_lab": { lens: "24mm Wide Angle", aperture: "f/8 (Sharp Detail)", light: "Volumetric Cinematic", kelvin: "5600K (Daylight)", color: "Teal & Orange" },
-        "clean_commercial": { lens: "85mm f/1.2 Prime", aperture: "f/8 (Sharp Detail)", light: "Volumetric Cinematic", kelvin: "5600K (Daylight)", color: "Vibrant Commercial" }
+    // هذه البيانات يجب أن تطابق ملف domains.json تماماً
+    const DOMAINS_MAP = {
+        industrial: ["production_line", "foundry", "viscous_flow", "mega_structures", "metal_craft"],
+        commercial: ["ad_hero", "digital_tech", "gourmet", "mockup", "product_edit", "living_spaces"],
+        agriculture: ["drone_survey", "export_quality", "greenhouse"],
+        real_estate: ["twilight", "interior", "construction"],
+        medical: ["dental_macro", "sterile_lab", "trust_portrait"]
     };
 
-    let mode = 'photo';
-    const showTip = (t) => { const b = document.getElementById('tooltip'); b.innerText = t; b.style.display = 'block'; };
-    const hideTip = () => document.getElementById('tooltip').style.display = 'none';
-
-    function previewFile() {
-        const file = document.getElementById('refImage').files[0];
-        const box = document.getElementById('previewBox');
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                box.style.display = 'block';
-                box.innerHTML = `<img src="${e.target.result}">`;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function setMode(m) {
-        mode = m;
-        document.getElementById('p-btn').classList.toggle('active', m === 'photo');
-        document.getElementById('v-btn').classList.toggle('active', m === 'video');
-        renderControls();
-        if(document.getElementById('presetSelector').value !== 'custom') applyAIPreset();
-    }
-
-    function renderControls() {
-        const container = document.getElementById('controls-container');
-        if (mode === 'photo') {
-            container.innerHTML = `
-                <div class="group"><div class="group-label">Optics</div><div class="grid">
-                <select id="lens"><option value="85mm f/1.2 Prime">85mm</option><option value="100mm f/2.8 Macro">100mm</option><option value="24mm Wide Angle">24mm</option></select>
-                <select id="aperture"><option value="f/1.2 (Extreme Bokeh)">f/1.2</option><option value="f/8 (Sharp Detail)">f/8</option></select>
-                </div></div>
-                <div class="group"><div class="group-label">Light</div><div class="grid">
-                <select id="light"><option value="Rembrandt Lighting">Rembrandt</option><option value="Rim/Edge Lighting">Rim Light</option><option value="Volumetric Cinematic">Volumetric</option></select>
-                <select id="kelvin"><option value="5600K (Daylight)">5600K</option><option value="3200K (Warm)">3200K</option></select>
-                </div></div>
-                <div class="group"><div class="group-label">Composition</div><select id="bg"><option value="Adaptive Studio">Adaptive Studio</option></select><select id="color" style="margin-top:5px;"><option value="Teal & Orange">Teal & Orange</option><option value="Monochromatic Luxury">Monochrome</option></select></div>`;
-        } else {
-            container.innerHTML = `<div class="group"><div class="group-label">Motion</div><select id="motion"><option value="Dolly Zoom">Dolly Zoom</option><option value="360 Orbital">Orbital</option></select></div>`;
-        }
-    }
-
-    function applyAIPreset() {
-        const pKey = document.getElementById('presetSelector').value;
-        const settings = PRESET_DB[pKey];
-        if (settings) {
-            for (let id in settings) {
-                const el = document.getElementById(id);
-                if (el) el.value = settings[id];
-            }
-        }
+    function syncPresets() {
+        const domain = document.getElementById('domainSelector').value;
+        const selector = document.getElementById('presetSelector');
+        selector.innerHTML = '';
+        DOMAINS_MAP[domain].forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p;
+            opt.innerText = p.replace('_', ' ').toUpperCase();
+            selector.appendChild(opt);
+        });
     }
 
     async function launchProduction() {
         const formData = new FormData();
-        formData.append('isUpdate', 'false');
-        formData.append('mode', mode);
-        // إرسال المجال المختار للسيرفر
         formData.append('domain', document.getElementById('domainSelector').value);
+        formData.append('preset', document.getElementById('presetSelector').value);
         formData.append('concept', document.getElementById('conceptInput').value);
         if (document.getElementById('refImage').files[0]) formData.append('refImage', document.getElementById('refImage').files[0]);
-        document.querySelectorAll('select').forEach(s => formData.append(s.id, s.value));
         
-        appendMsg("🚀 جارٍ استحضار الرؤية العالمية للمجال المختار...", "user-msg");
+        appendMsg("🚀 جارٍ الإنتاج...", "user-msg");
         const res = await fetch('/produce', { method: 'POST', body: formData });
         const d = await res.json();
         appendMsg(d.reply, "ai-msg");
@@ -179,15 +124,25 @@
         const val = document.getElementById('chatInput').value;
         if (!val) return;
         appendMsg(val, "user-msg");
-        document.getElementById('chatInput').value = '';
         const fd = new FormData();
         fd.append('isUpdate', 'true');
         fd.append('userUpdate', val);
-        // نرسل المجال أيضاً في التحديث لضمان استمرار السياق
         fd.append('domain', document.getElementById('domainSelector').value);
+        fd.append('preset', document.getElementById('presetSelector').value);
         const res = await fetch('/produce', { method: 'POST', body: fd });
         const d = await res.json();
         appendMsg(d.reply, "ai-msg");
+        document.getElementById('chatInput').value = '';
+    }
+
+    function previewFile() {
+        const file = document.getElementById('refImage').files[0];
+        const box = document.getElementById('previewBox');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => { box.style.display = 'block'; box.innerHTML = `<img src="${e.target.result}">`; };
+            reader.readAsDataURL(file);
+        }
     }
 
     function appendMsg(t, c) {
@@ -197,16 +152,14 @@
         d.innerText = t;
         if (c === 'ai-msg') {
             const btn = document.createElement('button');
-            btn.className = 'copy-btn';
-            btn.innerText = 'نسخ البرومبت';
-            btn.onclick = () => { navigator.clipboard.writeText(t); btn.innerText = 'تم النسخ!'; };
+            btn.className = 'copy-btn'; btn.innerText = 'نسخ';
+            btn.onclick = () => { navigator.clipboard.writeText(t); btn.innerText = 'تم!'; };
             d.appendChild(btn);
         }
         win.appendChild(d);
         win.scrollTop = win.scrollHeight;
-        return d;
     }
-    renderControls();
+    syncPresets();
 </script>
 </body>
 </html>
