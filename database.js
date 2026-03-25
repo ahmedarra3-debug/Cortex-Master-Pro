@@ -5,7 +5,6 @@ const dbPath = path.resolve(__dirname, 'cortex.db');
 const db = new sqlite3.Database(dbPath);
 
 db.serialize(() => {
-    // 1. جدول المشاريع (البيانات الأساسية)
     db.run(`CREATE TABLE IF NOT EXISTS projects (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         mode TEXT, 
@@ -16,19 +15,19 @@ db.serialize(() => {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    // 🌟 2. الجدول الجديد: سجل المحادثات (آلة الزمن)
+    // 🌟 التعديل هنا: إضافة column اسمه image_paths لتخزين مسارات الصور
     db.run(`CREATE TABLE IF NOT EXISTS project_logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         project_id INTEGER,
-        role TEXT, -- 'user' أو 'ai'
+        role TEXT, 
         content TEXT,
+        image_paths TEXT, 
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(project_id) REFERENCES projects(id)
     )`);
 });
 
 module.exports = {
-    // حفظ مشروع جديد
     saveProject: (data) => {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO projects (mode, domain, preset, motion, concept) VALUES (?, ?, ?, ?, ?)`;
@@ -39,18 +38,19 @@ module.exports = {
         });
     },
 
-    // 🌟 إضافة سجل جديد (سواء تعديل من المستخدم أو رد من المكنة)
-    addLog: (projectId, role, content) => {
+    // 🌟 تحديث دالة addLog لتستقبل الصور أيضاً
+    addLog: (projectId, role, content, imagePaths = null) => {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO project_logs (project_id, role, content) VALUES (?, ?, ?)`;
-            db.run(sql, [projectId, role, content], (err) => {
+            const sql = `INSERT INTO project_logs (project_id, role, content, image_paths) VALUES (?, ?, ?, ?)`;
+            // نحول مصفوفة الصور لنص (JSON) عشان تتسيف في الداتا بيز
+            const pathsJson = imagePaths ? JSON.stringify(imagePaths) : null;
+            db.run(sql, [projectId, role, content, pathsJson], (err) => {
                 if (err) reject(err);
                 else resolve();
             });
         });
     },
 
-    // جلب قائمة المشاريع للأرشيف
     getAllProjects: () => {
         return new Promise((resolve, reject) => {
             db.all(`SELECT * FROM projects ORDER BY created_at DESC`, [], (err, rows) => {
@@ -60,7 +60,6 @@ module.exports = {
         });
     },
 
-    // 🌟 جلب "كل الشريط التاريخي" لمشروع معين
     getProjectHistory: (projectId) => {
         return new Promise((resolve, reject) => {
             const sql = `SELECT * FROM project_logs WHERE project_id = ? ORDER BY created_at ASC`;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cortex Master Studio | Time Machine v1.4.1</title>
+    <title>Cortex Master Studio | Composition v1.5.0</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
@@ -59,7 +59,7 @@
 <aside class="sidebar">
     <div class="brand">
         <h2><i class="fas fa-film"></i> CORTEX</h2>
-        <small style="color: var(--gold);">TIME MACHINE v1.4.1</small>
+        <small style="color: var(--gold);">COMPOSITION v1.5.0</small>
     </div>
 
     <div>
@@ -93,13 +93,14 @@
         </div>
     </div>
 
-    <div>
-        <div class="section-title">03 / الإبداع</div>
-        <div class="group">
-            <input type="file" id="refImage" accept="image/*">
-            <textarea id="conceptInput" rows="3" placeholder="اشرح رؤيتك..."></textarea>
-        </div>
+   <div>
+    <div class="section-title">03 / الإبداع المركب</div>
+    <div class="group">
+        <div class="group-label"><i class="fas fa-images"></i> عناصر الإنتاج (ارفع حتى 5 صور)</div>
+        <input type="file" id="refImages" accept="image/*" multiple style="margin-bottom: 10px;">
+        <textarea id="conceptInput" rows="3" placeholder="اشرح كيف تدمج هذه العناصر، أو ارفع Start & End للفيديو..."></textarea>
     </div>
+   </div>
 
     <button class="btn-launch" onclick="launchProduction()">إطلاق الإنتاج</button>
     <button class="btn-new" onclick="startNewProject()"><i class="fas fa-plus"></i> مشروع جديد</button>
@@ -156,33 +157,63 @@
     }
 
     async function launchProduction() {
+        // 1. جلب العناصر من الواجهة
         const conceptInput = document.getElementById('conceptInput');
-        const concept = conceptInput.value;
-        if(!concept) return alert("مخرج أحمد، من فضلك اكتب فكرة المشروع أولاً.");
+        const imageInput = document.getElementById('refImages');
+        const motionSelect = document.getElementById('motion');
+        const domainSelector = document.getElementById('domainSelector');
+        const presetSelector = document.getElementById('presetSelector');
 
+        const concept = conceptInput.value;
+
+        // 2. التحقق من المدخلات (Validation)
+        if (!concept) {
+            return alert("مخرج أحمد، من فضلك اكتب رؤيتك الفنية أولاً.");
+        }
+
+        // 3. تجهيز الشاشة (UI Feedback)
         activeProjectId = null; 
-        appendMsg(`🚀 إطلاق مشروع: ${concept}`, "user-msg");
-        
+        appendMsg(`🚀 إطلاق إنتاج مركب: ${concept}`, "user-msg");
+
+        // 4. بناء حقيبة البيانات (FormData)
         const formData = new FormData();
         formData.append('mode', currentMode);
-        formData.append('domain', document.getElementById('domainSelector').value);
-        formData.append('preset', document.getElementById('presetSelector').value);
+        formData.append('domain', domainSelector.value);
+        formData.append('preset', presetSelector.value);
         formData.append('concept', concept);
-        
-        const motionSelect = document.getElementById('motion');
-        if(currentMode === 'video' && motionSelect) formData.append('motion', motionSelect.value);
-        if (document.getElementById('refImage').files[0]) formData.append('refImage', document.getElementById('refImage').files[0]);
-        
+
+        // إضافة خيار الحركة للسينما فقط
+        if (currentMode === 'video' && motionSelect) {
+            formData.append('motion', motionSelect.value);
+        }
+
+        // إضافة مصفوفة الصور (Multi-Asset)
+        if (imageInput.files.length > 0) {
+            for (let i = 0; i < imageInput.files.length; i++) {
+                formData.append('refImages', imageInput.files[i]);
+            }
+        }
+
+        // 5. إرسال الطلب للسيرفر (Production Launch)
         try {
-            const res = await fetch('/produce', { method: 'POST', body: formData });
-            const d = await res.json();
-            if(d.projectId) activeProjectId = d.projectId; 
-            appendMsg(d.reply, "ai-msg");
+            const response = await fetch('/produce', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.projectId) {
+                activeProjectId = data.projectId;
+            }
+
+            appendMsg(data.reply, "ai-msg");
+
         } catch (err) {
-            appendMsg("❌ عذراً، حدث خطأ في محرك الإنتاج.", "ai-msg");
+            console.error("Error launching production:", err);
+            appendMsg("❌ حدث خطأ في محرك الإنتاج المركب.", "ai-msg");
         }
     }
-
     async function sendUpdate() {
         const inputField = document.getElementById('chatInput');
         const val = inputField.value;
