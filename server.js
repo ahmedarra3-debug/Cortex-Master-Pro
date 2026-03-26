@@ -8,6 +8,8 @@ const db = require('./database');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
+
+// 📚 تحميل القاموس العالمي v2.1.0
 const domainsData = JSON.parse(fs.readFileSync('domains.json', 'utf8'));
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
@@ -16,30 +18,24 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 app.use(express.json());
 app.use(express.static('public'));
 
+// 🧠 ذاكرة الجلسة (نظام الـ 20 عنصر)
 let projectHistory = []; 
 
-function buildInstructions(mode, domainKey, presetKey, motion) {
-    const domain = domainsData[domainKey] || domainsData['industrial'];
-    const preset = domain.presets[presetKey] || Object.values(domain.presets)[0];
-    
-    let base = `أنت المخرج الفني العالمي. 
-    النمط: [${mode === 'video' ? 'سينما' : 'فوتو'}]. 
-    المجال: [${domain.label}]. 
-    القالب: [${preset.name}]. 
-    الرؤية: ${domain.vision} 
-    العدسة: ${preset.lens} | الإضاءة: ${preset.light} | التركيز: ${preset.focus}`; 
-    
-    if(mode === 'video') {
-        base += `\nحركة الكاميرا: ${motion}.`;
-        base += `\nمهمة إضافية: إذا وجدت صورتين، اعتبر الأولى Start Frame والثانية End Frame واشرح التحول بينهما تقنياً.`;
-    } else {
-        base += `\nمهمة إضافية: إذا وجدت أكثر من صورة، ادمجهم في كادر واحد، قرر من هو البطل (Hero) بناءً على قواعد التكوين الفني، وابتكر له خلفية إبداعية تليق بالمجال.`;
-    }
-    
-    base += `\nالرد: وصف إبداعي بالعربي + برومبت إنجليزي تقني.`;
-    return base;
+function manageHistory(role, content) {
+    projectHistory.push({ role, parts: [{ text: content }] });
+    if (projectHistory.length > 20) projectHistory = projectHistory.slice(-20);
 }
 
+// 🛠️ تعليمات "العين البصيرة" - نؤكد على الرؤية العربية هنا
+function buildGeminiInstructions(mode) {
+    return `أنت "عين" مخرج كورتكس العالمية. حلل الصور الـ 5 المرفقة:
+    1. حدد العناصر، الإضاءة، والخامات.
+    2. اذكر كود المجال من: [${Object.keys(domainsData.domains).join(', ')}].
+    3. صِف الرؤية الإبداعية بـ "اللغة العربية" بأسلوب سينمائي فاخر.
+    النمط: [${mode === 'video' ? 'سينما' : 'فوتوغراف'}].`;
+}
+
+// 🎬 الراوت الرئيسي
 app.post('/produce', upload.array('refImages', 5), async (req, res) => {
     const data = req.body;
     const isUpdate = (data.isUpdate === "true");
@@ -47,76 +43,107 @@ app.post('/produce', upload.array('refImages', 5), async (req, res) => {
     const currentInput = isUpdate ? data.userUpdate : data.concept;
 
     try {
-        const MASTER_INSTRUCTIONS = buildInstructions(data.mode, data.domain, data.preset, data.motion);
-        
-        // 🌟 تصحيح الموديل: استخدام نسخة مستقرة لضمان عدم حدوث Crash
-        const model = genAI.getGenerativeModel({ 
-    model: "models/gemini-3.1-flash-lite-preview", 
-    systemInstruction: MASTER_INSTRUCTIONS 
-});
+        // 1️⃣ المرحلة الأولى: تحليل العين (Gemini)
+        const geminiModel = genAI.getGenerativeModel({ 
+            model: "models/gemini-3.1-flash-lite-preview",
+            systemInstruction: buildGeminiInstructions(data.mode)
+        });
 
-        let result;
+        let geminiResult;
         if (req.files && req.files.length > 0) {
-            let promptParts = [`تعديل/فكرة: ${currentInput}`];
+            let promptParts = [currentInput];
             req.files.forEach(file => {
-                const imgBuffer = fs.readFileSync(file.path);
                 promptParts.push({
-                    inlineData: { data: imgBuffer.toString("base64"), mimeType: file.mimetype }
+                    inlineData: { data: fs.readFileSync(file.path).toString("base64"), mimeType: file.mimetype }
                 });
-                fs.unlinkSync(file.path);
+                fs.unlinkSync(file.path); 
             });
-            result = await model.generateContent(promptParts);
+            geminiResult = await geminiModel.generateContent(promptParts);
         } else {
-            const chat = model.startChat({ history: projectHistory });
-            result = await chat.sendMessage(currentInput);
+            const chat = geminiModel.startChat({ history: projectHistory });
+            geminiResult = await chat.sendMessage(currentInput);
         }
 
-        const creativeVision = result.response.text();
+        const creativeVision = geminiResult.response.text();
         
-        // 🌟 المحرك العالمي لـ OpenAI: يشمل كافة المجالات فيزياءً وفناً
-        const techRes = await openai.chat.completions.create({
-            model: "gpt-4o",
+        // اكتشاف المجال
+        const detectedDomainKey = Object.keys(domainsData.domains).find(key => {
+            const domainNameOnly = key.split('_').slice(1).join('_');
+            return creativeVision.toLowerCase().includes(domainNameOnly) || creativeVision.includes(key);
+        }) || '12_marketing_social';
+
+        const domainSpecs = domainsData.domains[detectedDomainKey];
+
+        // 2️⃣ المرحلة الثانية: "المهندس" (GPT-5.4) - ⚠️ إجبار اللغة الإنجليزية هنا
+        const architectRes = await openai.chat.completions.create({
+            model: "gpt-5.4", 
             messages: [
                 { 
                     role: "system", 
-                    content: `أنت كبير مهندسي الرندر والبرومبت. مهمتك تحويل الرؤية الفنية إلى كود تقني فائق الواقعية (Hyper-Realistic).
-            
-            قواعد ذهبية لكل المجالات:
-            1. الفيزياء البصرية: (Subsurface Scattering) للمحاصيل والجلد، (Ray-tracing) للمعادن، (IOR 1.47) للسوائل.
-            2. المواد: حدد ملمس الأسطح بدقة (Roughness, Anisotropic Metal, Organic Textures).
-            3. العدسات: (Arri Alexa) للسينما، (Macro 100mm) للطب والتجارة، (Wide-angle) للعقارات.
-            4. الإضاءة: (Volumetric Fog) للصناعة، (Golden Hour) للزراعة، (Sterile White) للطب.
-            5. الإخراج: ركز على 8k, Unreal Engine 5.4 style, Octane Render.` 
+                    content: `You are 'The Architect'. Your task is to translate the Arabic creative vision into a high-end, technical ENGLISH image prompt.
+                    
+                    ⚠️ RULES:
+                    - The output prompt MUST be in ENGLISH.
+                    - Use technical terms for lighting, lenses, and materials.
+                    - Specs: ${JSON.stringify(domainSpecs.technical_params)}
+                    - Quality: ${domainsData.global_quality.specs}`
                 },
                 { role: "user", content: creativeVision }
             ]
         });
 
-        const promptsOutput = techRes.choices[0].message.content;
-        const finalReply = creativeVision + "\n\n" + promptsOutput;
+        const rawTechnicalPrompt = architectRes.choices[0].message.content;
 
+        // 3️⃣ المرحلة الثالثة: "المستشار" (GPT-4o) - ⚠️ تنظيم الرد النهائي
+        const consultantRes = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+                { 
+                    role: "system", 
+                    content: `أنت المستشار الفني وكبير مراجعي الجودة في Cortex Media. 
+                    مهمتك مراجعة البرومبت الإنجليزي وتطويره.
+                    
+                    ⚠️ التنسيق الإجباري للرد:
+                    1. ضع البرومبت الإنجليزي النهائي المطور داخل (Markdown Code Block).
+                    2. اكتب (Director's Note: نصيحة فنية قصيرة بالعربية للمخرج أحمد) خارج الكود بلوك.`
+                },
+                { role: "user", content: `الرؤية: ${creativeVision}\n\nالبرومبت: ${rawTechnicalPrompt}` }
+            ]
+        });
+
+        const finalReply = creativeVision + "\n\n" + consultantRes.choices[0].message.content;
+
+        // 💾 [إدارة الحفظ الذكي]
         if (!isUpdate || !activeId) {
             activeId = await db.saveProject({
-                mode: data.mode, domain: data.domain, preset: data.preset, 
-                motion: data.motion, concept: data.concept
+                mode: data.mode, domain: detectedDomainKey, preset: "Universal_v2", 
+                motion: data.motion || 'none', concept: data.concept
             });
+            console.log("📂 [Cortex DB]: مشروع جديد تم إنشاؤه برقم:", activeId);
         }
 
-        const imageNames = req.files ? req.files.map(f => f.originalname) : null;
-        await db.addLog(activeId, 'user', currentInput, imageNames);
-        await db.addLog(activeId, 'ai', finalReply, null);
+        // الحفظ في الأرشيف (Logs) يتم دائماً
+        try {
+            const imageNames = req.files ? req.files.map(f => f.originalname) : null;
+            await db.addLog(activeId, 'user', currentInput, imageNames);
+            await db.addLog(activeId, 'ai', finalReply, null);
+            console.log("📝 [Cortex DB]: تم تسجيل المحادثة للمشروع:", activeId);
+        } catch (dbErr) {
+            console.error("⚠️ [Cortex DB Error]: فشل تسجيل اللوج:", dbErr.message);
+        }
 
-        projectHistory.push({ role: "user", parts: [{ text: currentInput }] });
-        projectHistory.push({ role: "model", parts: [{ text: finalReply }] });
+        manageHistory("user", currentInput);
+        manageHistory("model", finalReply);
 
         res.json({ success: true, reply: finalReply, projectId: activeId });
 
     } catch (error) {
-        console.error("❌ عطل تقني:", error.message);
+        console.error("❌ عطل في مجلس العقول:", error.message);
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
+// مسارات الاسترجاع
 app.get('/history', async (req, res) => {
     try {
         const projects = await db.getAllProjects();
@@ -133,4 +160,8 @@ app.get('/project-history/:id', async (req, res) => {
 
 app.post('/reset', (req, res) => { projectHistory = []; res.json({ success: true }); });
 
-app.listen(3000, () => console.log("🚀 Cortex Engine v1.5.1 الشامل مُفعل وجاهز للإنتاج"));
+app.listen(3000, () => {
+    console.log("--------------------------------------------------");
+    console.log("🚀 Cortex Engine v1.6.8 - Ready for Production");
+    console.log("--------------------------------------------------");
+});

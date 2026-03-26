@@ -1,50 +1,130 @@
 {
-  "industrial": {
-    "label": "المحور الصناعي (Industrial Physics & Dynamics)",
-    "vision": "أنت مدير التصوير السينمائي للمنشآت الثقيلة. في v1.5.0: تعامل مع السوائل (الزيوت) كأجسام فيزيائية لها 'Surface Tension' عالي. ادمج العناصر باستخدام 'Path Tracing' لضمان انعكاس المعادن على السوائل. اجعل الخلفية المبتكرة تحتوي على 'Volumetric Fog' لإظهار عمق المكان وقوته الميكانيكية.",
-    "presets": {
-      "production_line": { "name": "خطوط الإنتاج الذكية", "lens": "35mm T2.0 Anamorphic (Cinematic Squeeze)", "light": "Cool White LED (6500K) with Global Illumination", "focus": "Mechanical Symmetry & Motion Blur on moving parts" },
-      "foundry": { "name": "صهر المعادن", "lens": "50mm Prime with Heat Haze Effect", "light": "High-Dynamic-Range (HDR) Molten Glow with Caustics", "focus": "Molten metal texture & Ember particles" },
-      "viscous_flow": { "name": "انسياب السوائل (بتروجاك)", "lens": "100mm f/2.8 Macro (Ultra-Sharp)", "light": "Rim Lighting with 0.5 Exposure Compensation", "focus": "Viscosity, Bubble Physics, and Oil Refraction (Index of Refraction: 1.47)" },
-      "mega_structures": { "name": "المنشآت العملاقة", "lens": "14mm Wide-Angle (Zero Distortion)", "light": "Direct Sunlight with Deep Ambient Occlusion", "focus": "Structural Scale & Architectural Rigidity" },
-      "metal_craft": { "name": "اللحام والشرر", "lens": "85mm f/1.2 (Creamy Bokeh)", "light": "Dynamic Arc-Flash with Lens Flare (JJ Abrams Style)", "focus": "Sparks trajectory & Steel surface micro-scratches" }
-    }
+  "engine_version": "v2.1.0_Global_Master",
+  "master_directive": "دمج الرؤية الفنية العربية مع أدق المعايير الفيزيائية العالمية لضمان واقعية تتخطى التصوير الفوتوغرافي التقليدي.",
+  "global_quality": {
+    "specs": "Photorealistic, 8K, Ray Tracing, Global Illumination, ACES Color Space, Unreal Engine 5.4 Render Style",
+    "post_processing": "High-Dynamic-Range (HDR), Color Grading, Motion Blur, Depth of Field (DoF)"
   },
-  "commercial": {
-    "label": "المحور التجاري (Luxury Advertising Studio)",
-    "vision": "أنت مخرج إعلانات لبراندات عالمية. في v1.5.0: طبق قاعدة 'Fresnel Effect' على الأسطح (انعكاس يتغير مع زاوية الرؤية). ادمج المنتجات بـ 'Softbox Diffusion' مخصص. البطل (Hero) يجب أن يمتلك 'Specular Highlights' حادة تجذب العين، مع 'Negative Space' مدروس للفخامة.",
-    "presets": {
-      "ad_hero": { "name": "بطل الإعلان (Premium)", "lens": "100mm Macro f/2.8 L-Series", "light": "3-Point Studio Setup (Key, Fill, Backlight)", "focus": "Micro-surface roughness & Flawless Branding" },
-      "digital_tech": { "name": "التكنولوجيا والأجهزة", "lens": "50mm Prime (T-Stop 1.5)", "light": "Sharp Blue/Teal Edge Lighting", "focus": "Glass Transparency & Anti-reflective coating" },
-      "gourmet": { "name": "الأغذية والشهية", "lens": "60mm Tilt-Shift", "light": "Warm Natural Light (3200K) with Bounce Boards", "focus": "Subsurface Scattering (SSS) on organic textures" },
-      "mockup": { "name": "موك أب (Clean Mockup)", "lens": "50mm Flat-Field", "light": "High-Key Shadowless Lighting", "focus": "Texture mapping & Graphic alignment" },
-      "product_edit": { "name": "تصحيح الإضاءة", "lens": "85mm Prime", "light": "Clarity-enhanced Overcast Light", "focus": "Dynamic Range Recovery & Shadow Depth" }
-    }
-  },
-  "agriculture": {
-    "label": "المحور الزراعي (Agri-Export Vision)",
-    "vision": "خبير تصوير محاصيل للتصدير الدولي. في v1.5.0: ادمج الثمار مع الأرض باستخدام 'Natural Sunlight Kelvin (5500K)'. ركز على الـ 'Organic Texture' وتجنب الظلال القاسية. المحاصيل المدمجة يجب أن يظهر عليها 'Dew Drops' باستخدام 'Macro Detail Enhancement'.",
-    "presets": {
-      "drone_survey": { "name": "مسح الدرون الشامل", "lens": "24mm Wide (Aerial Perspective)", "light": "Golden Hour (Sun at 15 degrees)", "focus": "Vastness, Grid Patterns, and Crop Health color" },
-      "export_quality": { "name": "الفرز والجودة", "lens": "100mm Macro", "light": "Diffused Natural Light (Overcast)", "focus": "Fruit skin integrity (Subsurface Scattering) & Shine" },
-      "greenhouse": { "name": "الصوبات الذكية", "lens": "35mm f/1.4", "light": "Artificial Grow-Light (Purple/Pink Spectrum Mix)", "focus": "Technological integration with nature" }
-    }
-  },
-  "real_estate": {
-    "label": "المحور العقاري (Architectural Masterclass)",
-    "vision": "خبير في الهندسة والرفاهية. في v1.5.0: ادمج التصميمات بـ 'Vertical Alignment' مثالي (خطوط مستقيمة). استخدم 'Ambient Occlusion' عند التقاء الحوائط بالأرض. الخلفية يجب أن تكون 'Twilight' مع 'Interior Warm Glow' لخلق شعور بالراحة والفخامة.",
-    "presets": {
-      "twilight": { "name": "سحر الغروب", "lens": "17mm PC-E (Perspective Control)", "light": "Mixed Lighting (Blue Hour Exterior / Warm Interior)", "focus": "Symmetry & Evening Atmosphere" },
-      "interior": { "name": "الفخامة الداخلية", "lens": "14mm Ultra-Wide", "light": "Soft Daylight Window Influx", "focus": "Material textures (Marble/Wood) & Spatial flow" },
-      "construction": { "name": "قوة الخرسانة", "lens": "35mm f/8 (Deep Depth of Field)", "light": "Hard Midday Sun for Sharp Shadows", "focus": "Raw materials & Engineering Precision" }
-    }
-  },
-  "medical": {
-    "label": "المحور الطبي (Clinical Precision)",
-    "vision": "خبير في الدقة الجراحية. في v1.5.0: ادمج الأدوات في بيئة 'Sterile Blue'. ركز على 'Specular Reflections' على المعادن المعقمة. الإضاءة يجب أن تكون 'Ring Flash' لإلغاء الظلال غير المرغوب فيها وإظهار التفاصيل المجهرية.",
-    "presets": {
-      "dental_macro": { "name": "دقة الأسنان (Dental)", "lens": "100mm Macro f/2.8", "light": "Shadowless Ring Light (Clinical White)", "focus": "Enamel translucency & Porcelain texture" },
-      "sterile_lab": { "name": "المختبر التكنولوجي", "lens": "50mm Prime", "light": "Cool Laboratory Fluorescent", "focus": "Glassware clarity & Liquid refraction" }
+  "domains": {
+    "1_manufacturing": {
+      "label": "المحور الصناعي والإنتاج الثقيل",
+      "vision": "أنت مدير التصوير للمنشآت العملاقة. أظهر قوة الحديد وعظمة الماكينات. تعامل مع خطوط الإنتاج كأوركسترا ميكانيكية متناغمة.",
+      "technical_params": {
+        "lighting": "Kelvin: 5500K (Industrial Daylight) with high-contrast shadows",
+        "lenses": "35mm Anamorphic (Cinematic Squeeze) for scale, 100mm Macro for welding precision",
+        "materials": "Brushed steel, weathered iron, heavy grease textures, IOR: 2.5 (Metal)",
+        "atmosphere": "Volumetric lighting, floating dust particles, cinematic smoke, motion blur on gears"
+      }
+    },
+    "2_agriculture": {
+      "label": "المحور الزراعي والتصدير الدولي",
+      "vision": "خبير تصوير المحاصيل العالمية. أظهر نضارة الثمرة كأنها تتنفس. ادمج الثمار مع الأرض باستخدام ضوء الشمس الطبيعي بعيداً عن الظلال القاسية.",
+      "technical_params": {
+        "lighting": "Kelvin: 3200K (Golden Hour), soft rim light on organic edges",
+        "lenses": "24mm f/1.4 for 100-acre field vastness, 85mm Macro for fruit skin integrity",
+        "materials": "Organic Subsurface Scattering (SSS), morning dew (IOR: 1.33), soil moisture",
+        "atmosphere": "Natural clarity, vibrant saturated greens, morning haze"
+      }
+    },
+    "3_commerce_retail": {
+      "label": "المحور التجاري والاستهلاكي الشامل",
+      "vision": "مخرج إعلانات لبراندات عالمية. طبق قاعدة 'Fresnel Effect' (انعكاس يتغير مع الزاوية). اجعل للمنتج 'Specular Highlights' حادة تجذب العين فوراً.",
+      "technical_params": {
+        "lighting": "Kelvin: 5000K (Neutral Studio), softbox diffusion, clamshell setup",
+        "lenses": "50mm Prime (Zero Distortion) for electronics, 35mm for lifestyle context",
+        "materials": "Glossy vs Matte contrast, IOR: 1.5 (Plastic/Glass), appetizing food steam",
+        "atmosphere": "Minimalist backgrounds, premium commercial aesthetic, perfect product alignment"
+      }
+    },
+    "4_logistics_shipping": {
+      "label": "المجال اللوجستي وحركة التجارة العالمية",
+      "vision": "خبير تصوير الموانئ وسلاسل الإمداد. ركز على الضخامة وحركة السفن والطائرات. استخدم مسارات الضوء (Light Trails) لإظهار سرعة الإمداد.",
+      "technical_params": {
+        "lighting": "Kelvin: 6500K (Blue Hour) mixed with sodium vapor amber lights (2000K)",
+        "lenses": "14mm Ultra-wide (Zero Distortion) for immense scale, tilt-shift for miniature port effect",
+        "materials": "Corrugated metal, shipping container paint, wet asphalt (IOR: 1.4)",
+        "atmosphere": "Dynamic motion, global industrial power, cinematic lens flares"
+      }
+    },
+    "5_automotive_oils": {
+      "label": "عالم السيارات وزيوت بتروجاك",
+      "vision": "أنت مخرج إعلانات السيارات الفاخرة. تعامل مع الزيت كجسم فيزيائي له 'Surface Tension' عالي. أظهر لزوجة وانسياب الزيت بدقة مجهرية.",
+      "technical_params": {
+        "lighting": "Kelvin: 5600K, gradient softbox reflections, rim light for silhouette",
+        "lenses": "35mm heroic low-angle car shots, 100mm f/2.8 Macro for oil viscosity",
+        "materials": "Metallic paint flakes, Anisotropic brushed metal, Oil IOR: 1.48 (Viscous)",
+        "atmosphere": "Luxury showroom, bubble physics in oil, high-speed motion blur"
+      }
+    },
+    "6_photography_portraits": {
+      "label": "مجال التصوير الاستوديو والبورتريه",
+      "vision": "أستاذ الإضاءة البشرية. حول صورة الموبايل لبوستر عالمي. ركز على مسام الجلد وبريق العين. استخدم إضاءة 'Rembrandt' لخلق العمق الدرامي.",
+      "technical_params": {
+        "lighting": "Rembrandt lighting, butterfly setup, 45-degree key light, Kelvin: 4500K",
+        "lenses": "85mm f/1.2 (Creamy Bokeh), 50mm for true-to-life perspective",
+        "materials": "Skin pore micro-detail, eye iris refraction (IOR: 1.38), fabric textures",
+        "atmosphere": "Authentic studio depth, soft-focus background, professional color grading"
+      }
+    },
+    "7_media_printing": {
+      "label": "مجال الصحافة والطباعة والإعلان",
+      "vision": "خبير التصميم المطبوع. ركز على ملمس الورق ولمعة الحبر (Ink Sheen). المحاكاة يجب أن تظهر جودة الطباعة الفاخرة والـ Spot UV.",
+      "technical_params": {
+        "lighting": "Flat even lighting for layout, top-down product flat-lay, Kelvin: 5000K",
+        "lenses": "35mm for layout balance, 60mm Macro for ink-on-paper texture",
+        "materials": "CMYK ink sheen, Matte paper grain, Spot UV coating (IOR: 1.55), Gold foil",
+        "atmosphere": "Editorial precision, vibrant ink saturation, graphic design alignment"
+      }
+    },
+    "8_packaging_luxury": {
+      "label": "استيكر العبوات والمنتجات الفاخرة",
+      "vision": "مصمم الهوية البصرية الفاخرة. ركز على التفاصيل الدقيقة في الـ 'Embossing' (الحفر) والـ 'Stamping' الذهبي. المنتج يجب أن يلمع كجوهرة.",
+      "technical_params": {
+        "lighting": "Focused spotlighting on textures, soft glow for premium feel, Kelvin: 4000K",
+        "lenses": "100mm Macro f/2.8 for label typography and metallic details",
+        "materials": "Gold leaf stamping, embossed paper texture, Glass refraction (IOR: 1.52)",
+        "atmosphere": "Exclusivity, ultra-sharp focus, high-end prestige look"
+      }
+    },
+    "9_real_estate": {
+      "label": "العقارات والتسويق المعماري والإنشاءات",
+      "vision": "خبير الرفاهية والهندسة. ادمج التصميمات بـ 'Vertical Alignment' مثالي. استخدم 'Ambient Occlusion' عند التقاء الحوائط بالأرض لخلق الواقعية.",
+      "technical_params": {
+        "lighting": "Kelvin: 3000K (Warm Interior) vs 7000K (Exterior Dusk), HDR balance",
+        "lenses": "16mm wide-angle with perspective correction (PC-E lens)",
+        "materials": "Polished marble (IOR: 1.6), architectural glass, wood grain textures",
+        "atmosphere": "Spaciousness, airy clean interiors, luxury lifestyle invite"
+      }
+    },
+    "10_medical_dental": {
+      "label": "مجال الطب والجراحة والأسنان",
+      "vision": "خبير الدقة الجراحية والطبية. ادمج الأدوات في بيئة 'Sterile Blue'. ركز على شفافية مينا الأسنان (Enamel Translucency) ونظافة المعدن.",
+      "technical_params": {
+        "lighting": "Kelvin: 6500K (Sterile White), high CRI index, shadowless ring light",
+        "lenses": "100mm Macro for dental enamel, 35mm for clinical ambiance",
+        "materials": "Enamel Subsurface Scattering (SSS), surgical steel, liquid transparency",
+        "atmosphere": "Clinical trust, absolute precision, sterile high-key clarity"
+      }
+    },
+    "11_cosmetics_beauty": {
+      "label": "مستحضرات التجميل والموضة",
+      "vision": "مخرج عالم الجمال. ركز على انسيابية الكريمات (Viscosity) ولمعان البشرة الـ 'Dewy'. ادمج الألوان بتناغم يخدم فكرة الأنوثة والفخامة.",
+      "technical_params": {
+        "lighting": "Beauty-dish lighting, ring-light reflection, Kelvin: 5200K",
+        "lenses": "100mm Macro for lash/lip detail, 85mm for facial symmetry",
+        "materials": "Dewy skin texture, cream viscosity (IOR: 1.45), powder particles",
+        "atmosphere": "Ethereal glow, flawless luxury, soft-dreamy aesthetic"
+      }
+    },
+    "12_marketing_social": {
+      "label": "التسويق الإلكتروني والسوشيال ميديا",
+      "vision": "مخرج المحتوى الفيروسي (Viral Content). ركز على الألوان الصارخة والتباين العالي لجذب العين في ثانية واحدة. التكوين يجب أن يكون عصرياً وجريئاً.",
+      "technical_params": {
+        "lighting": "Punchy high-contrast lighting, vibrant RGB neon accents, Kelvin: 6000K",
+        "lenses": "24mm dynamic perspective, close-up center focus for mobile screens",
+        "materials": "Hyper-saturated colors, clean bold textures, digital-friendly finishes",
+        "atmosphere": "High energy, trend-focused, attention-grabbing pop art style"
+      }
     }
   }
 }
