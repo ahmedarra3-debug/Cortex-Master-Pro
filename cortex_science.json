@@ -1,0 +1,157 @@
+{
+  "cortex_version": "1.8.5",
+  "director_id": "Ahmed_Cortex_Media",
+  "input_logic": {
+    "MODE_T2V": {
+      "slots": 0,
+      "strategy": "Pure_Generation",
+      "description": "توليد فيديو من نص فقط بناءً على خيال المكنة ومعطيات المجال"
+    },
+    "MODE_I2V_START": {
+      "slots": 1,
+      "strategy": "Animation_Propulsion",
+      "description": "تحريك فريم البداية مع الحفاظ على الهوية البصرية للمنتج"
+    },
+    "MODE_I2V_MORPH": {
+      "slots": 2,
+      "strategy": "Frame_Interpolation",
+      "description": "خلق مسار حركي وفيزيائي منطقي يربط بين فريم البداية وفريم النهاية"
+    }
+  },
+  "model_profiles": {
+    "Wan_2.1": {
+      "focus": "High_Motion_Fluidity_And_Textures",
+      "prompt_style": "Action_Descriptive",
+      "keywords": ["complex motion", "high-quality textures", "fluid physics", "stable anatomy"]
+    },
+    "Seedance": {
+      "focus": "Temporal_Consistency_And_Detail",
+      "prompt_style": "Detail_Oriented",
+      "keywords": ["stable movement", "consistent lighting", "high fidelity", "flicker-free"]
+    },
+    "Grok_Video": {
+      "focus": "Creative_Realism_And_Edge",
+      "prompt_style": "Raw_Aesthetic",
+      "keywords": ["hyper-realistic", "cinematic grit", "uncensored detail", "dramatic lighting"]
+    },
+    "Kling_AI": {
+      "focus": "Physical_Accuracy_And_Motion",
+      "prompt_style": "Action_Direct",
+      "keywords": ["high motion", "realistic physics", "fluid simulation", "large-scale movement"]
+    },
+    "Luma_Dream_Machine": {
+      "focus": "Cinematic_Morphing",
+      "prompt_style": "Visual_Evolution",
+      "keywords": ["smooth transition", "dynamic lighting shift", "keyframe consistency"]
+    },
+    "Sora_OpenAI": {
+      "focus": "Complex_Storytelling_And_Environment",
+      "prompt_style": "Descriptive_Narrative",
+      "keywords": ["hyper-detailed texture", "atmospheric depth", "cinematic storytelling"]
+    },
+    "Google_Veo": {
+      "focus": "Professional_Cinematography",
+      "prompt_style": "Technical_Director",
+      "keywords": ["focal length", "camera gimbal move", "lighting temperature", "24fps"]
+    },
+    "Hailuo_MiniMax": {
+      "focus": "Ultra_Realistic_Humans_And_Faces",
+      "prompt_style": "Photorealistic",
+      "keywords": ["raw footage", "highly detailed skin", "natural movement", "human emotions"]
+    },
+    "Runway_Gen3": {
+      "focus": "Artistic_Control_And_Stylization",
+      "prompt_style": "Creative_Brief",
+      "keywords": ["motion brush", "directed movement", "stylized rendering", "aesthetic control"]
+    }
+  },
+  "universal_physics": {
+    "shutter_rule": "180_degree_motion_blur",
+    "lighting_standard": "ACES_Workflow, Ray-Traced_Global_Illumination",
+    "pacing": "Rhythmic_Editing_Logic",
+    "gravity_constant": "9.8m/s²",
+    "temporal_consistency": "High"
+  },
+  "visual_domains": {
+    "premium_automotive_fluids": {
+      "brand_focus": "PetroJac",
+      "vibe": "Prestige, High-Performance, Liquid-Gold",
+      "lighting": "Studio_Rim_Lighting, Metallic_Anamorphic_Flares",
+      "fluid_dynamics": "High_Viscosity, Creamy_Flow, IOR_2.48",
+      "camera": "Slow_Orbital, Hero_Low_Angle, Macro_Detail"
+    },
+    "medical_dental": {
+      "vibe": "Clinical_Purity, Sterile_Trust",
+      "lighting": "High-Key, Shadowless, 5600K_Cool_White",
+      "camera": "Stable_Micro_Focus, Slow_Slide_Panning",
+      "textures": "Polished_Ceramics, Matte_Medical_Steel"
+    },
+    "luxury_real_estate": {
+      "vibe": "Epic_Scale, Architectural_Grandeur",
+      "lighting": "Golden_Hour, Volumetric_Light_Beams",
+      "camera": "Drone_Fly-through, Wide-angle_Dolly_Parallel",
+      "lens": "16mm_to_24mm_Ultra-Wide"
+    },
+    "heavy_manufacturing": {
+      "vibe": "Industrial_Power, Scale, Precision",
+      "lighting": "Low-Key, Harsh_Contrast, Sparks_Emissive",
+      "camera": "Fast_Tracking, Industrial_Crane_Shots",
+      "pacing": "Aggressive, Mechanical_Rhythm"
+    },
+    "commercial_food_cafes": {
+      "vibe": "Sensory_Appetite, Textural_Richness",
+      "lighting": "Backlit_Steam, Warm_Diffusion",
+      "dynamics": "Fluid_Splash, Condensation_Droplets",
+      "camera": "High-Speed_Macro, Rotating_Platform"
+    },
+    "mobile_accessories_tech": {
+      "vibe": "Futuristic, Clean, Sharp",
+      "lighting": "RGB_Neon_Accents, Glass_Reflections",
+      "camera": "Quick_Cuts, Jerk_Zoom, Technical_Pan",
+      "specs": "Ray-traced_Glass, Holographic_Shaders"
+    },
+    "cosmetics_skincare": {
+      "vibe": "Ethereal, Soft_Elegance, Glow",
+      "lighting": "Soft-box_Diffusion, Bloom_Effect",
+      "camera": "Floating_Motion, Dreamy_Slow_Mo",
+      "textures": "Satin_Skin, Pearlescent_Liquids"
+    },
+    "perfumes_luxury": {
+      "vibe": "Mysterious, Sophisticated, Fragrant_Visuals",
+      "lighting": "Chiaroscuro, Caustics_through_glass",
+      "dynamics": "Particle_Mist, Slow_Floating_Droplets",
+      "camera": "Macro_Orbital, Weightless_Motion"
+    },
+    "fashion_clothing": {
+      "vibe": "Style, Movement, Fabric_Texture",
+      "lighting": "Runway_Spotlights, High-Fashion_Contrast",
+      "camera": "Rhythmic_Tilt, Subject_Tracking, Posed_Freeze_Frames",
+      "dynamics": "Fabric_Simulation, Cloth_Flow_Physics"
+    },
+    "agribusiness_landscapes": {
+      "vibe": "Bounty, Organic_Growth, Systematic_Yield",
+      "lighting": "Direct_Sunlight, Vibrant_Colors",
+      "camera": "Horizon_Drone_Sweep, Time-lapse_Growth",
+      "focus": "Tomato_Red_Saturation, Soil_Texture"
+    },
+    "media_cinematic_scenes": {
+      "vibe": "Narrative_Depth, Emotional_Atmosphere",
+      "lighting": "Dramatic_Motivated_Light, Film_Noir_Elements",
+      "camera": "Handheld_Realism, Steadicam_Flow",
+      "post_specs": "Film_Grain, Anamorphic_Desqueeze"
+    },
+    "human_dialogue_interaction": {
+      "vibe": "Connection, Reaction, Focus",
+      "lighting": "Three-point_Portrait_Lighting",
+      "camera": "Over-the-shoulder, Rack_Focus, Eye-level_Close-up",
+      "pacing": "Character-driven_Timing"
+    },
+    "cgi_vfx_commercials": {
+      "vibe": "Impossible_Physics, Hyper-Reality, USG_Style",
+      "lighting": "Dynamic_Environments, Sub-surface_Scattering",
+      "camera": "Impossible_Camera_Paths, 360_Infinite_Loop",
+      "style": "UE5.4_Style, Octane_Render_Gloss"
+    }
+  },
+  "logic_priority": "Ahmed_Manual_Override > Model_Profile > Domain_Science > Universal_Physics"
+}
