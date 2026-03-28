@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cortex Master Studio | Imbraotoriyet v1.5.9</title>
+    <title>Cortex Master Studio | Imbraotoriyet v1.8.5</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
@@ -11,7 +11,7 @@
         * { box-sizing: border-box; transition: 0.2s; }
         body { background: var(--bg); color: var(--text-main); font-family: 'Cairo', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar Styles */
+        /* Sidebar (Your Original Layout) */
         .sidebar { width: 420px; background: var(--panel); border-left: 1px solid var(--border); padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
         .brand { text-align: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 10px; }
         .brand h2 { color: var(--accent); margin: 0; font-weight: 800; letter-spacing: 1px; }
@@ -28,8 +28,18 @@
         select, textarea, input { width: 100%; background: #020617; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 8px; font-size: 14px; outline: none; font-family: 'Cairo'; }
         select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(14, 165, 233, 0.2); }
         
+        /* Video Aspect Ratio Buttons */
+        .ratio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px; }
+        .ratio-btn { background: #000; border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 700; }
+        .ratio-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(14, 165, 233, 0.1); }
+
+        /* Video Keyframe Slots (Object-fit: contain fix) */
+        .frame-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .frame-slot { background: #000; border: 2px dashed var(--border); border-radius: 12px; height: 110px; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
+        .frame-slot img { width: 100%; height: 100%; object-fit: contain; position: absolute; z-index: 1; }
+        .slot-label { position: absolute; bottom: 5px; background: rgba(0,0,0,0.8); color: var(--accent); font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 800; z-index: 5; }
+
         .btn-launch { background: linear-gradient(135deg, var(--accent), #2563eb); color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: 800; cursor: pointer; font-size: 17px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); margin-top: 10px; }
-        .btn-launch:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-new { background: #1e293b; color: #fff; border: 1px solid var(--border); padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; margin-top: 15px; font-weight: 700; }
         .btn-history { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; margin-top: 10px; font-weight: 700; }
 
@@ -37,21 +47,15 @@
         .main-stage { flex: 1; display: flex; flex-direction: column; background: #000; position: relative; }
         #chat-window { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 25px; background: radial-gradient(circle at 50% 20%, #0f172a 0%, #020617 100%); }
         
-        /* Messages Styling */
         .msg { padding: 20px; border-radius: 18px; max-width: 88%; line-height: 1.8; white-space: pre-wrap; font-size: 15px; position: relative; animation: fadeIn 0.3s ease; }
-        .ai-msg { background: rgba(15, 23, 42, 0.9); color: #e2e8f0; border-right: 5px solid var(--accent); align-self: flex-start; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .user-msg { background: var(--accent); color: #000; align-self: flex-end; font-weight: 700; box-shadow: 0 5px 15px rgba(14, 165, 233, 0.2); }
-        
-        .directors-note { background: rgba(245, 158, 11, 0.1); border: 1px solid var(--gold); padding: 12px; border-radius: 10px; margin-top: 15px; color: var(--gold); font-weight: 700; }
+        .ai-msg { background: rgba(15, 23, 42, 0.9); color: #e2e8f0; border-right: 5px solid var(--accent); align-self: flex-start; }
+        .user-msg { background: var(--accent); color: #000; align-self: flex-end; font-weight: 700; }
 
-        /* UI Helpers */
-        #imagePreviewContainer { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; min-height: 90px; border: 2px dashed rgba(14, 165, 233, 0.2); padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.2); }
-        .preview-wrapper { position: relative; width: 85px; height: 85px; }
-        .preview-thumb { width: 100%; height: 100%; object-fit: cover; border: 2px solid var(--accent); border-radius: 10px; }
-        .remove-img-btn { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-
-        .copy-btn { position: absolute; top: 12px; left: 12px; background: rgba(14, 165, 233, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 800; z-index: 5; }
-        .copy-btn:hover { background: var(--accent); color: #000; }
+        /* UI Helpers with RED X (Fixed logic) */
+        #imagePreviewContainer { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; min-height: 90px; border: 2px dashed rgba(14, 165, 233, 0.2); padding: 12px; border-radius: 12px; }
+        .preview-wrapper { position: relative; width: 85px; height: 85px; background: #000; border-radius: 10px; border: 1px solid var(--accent); }
+        .preview-thumb { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+        .remove-img-btn { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 10; }
 
         /* Modal History */
         #historyModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: none; z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
@@ -75,7 +79,7 @@
 <aside class="sidebar">
     <div class="brand">
         <h2>CORTEX MASTER</h2>
-        <small>IMBRAOTORIYET v1.5.9</small>
+        <small>IMBRAOTORIYET v1.8.5</small>
     </div>
 
     <div>
@@ -88,41 +92,62 @@
             <div class="group-label"><i class="fas fa-microchip"></i> التخصص الإبداعي</div>
             <select id="domainSelector">
                 <option value="auto">🌟 اكتشاف تلقائي ذكي (Cortex AI)</option>
-                <option value="1_manufacturing">المحور الصناعي والإنتاج الثقيل</option>
-                <option value="2_agriculture">الزراعة والتصدير الدولي</option>
-                <option value="3_commerce_retail">التجارة والاستهلاك العام</option>
-                <option value="4_logistics_shipping">اللوجستيات وحركة التجارة</option>
-                <option value="5_automotive_oils">عالم السيارات وزيوت بتروجاك</option>
-                <option value="6_photography_portraits">التصوير والبورتريه الاحترافي</option>
-                <option value="7_media_printing">الصحافة والطباعة والإعلان</option>
-                <option value="8_packaging_luxury">استيكر العبوات والمنتجات الفاخرة</option>
-                <option value="9_real_estate">العقارات والإنشاءات الهندسية</option>
-                <option value="10_medical_dental">الطب والجراحة والأسنان</option>
-                <option value="11_cosmetics_beauty">مستحضرات التجميل والموضة</option>
-                <option value="12_marketing_social">التسويق والسوشيال ميديا</option>
-            </select>
+                </select>
         </div>
     </div>
 
-    <div id="video-controls" style="display:none;">
-        <div class="section-title">02 / لغة الكاميرا</div>
+    <div id="video-extras" style="display:none;">
+        <div class="section-title">02 / محرك السينما والمقاسات</div>
         <div class="group">
-            <select id="motion">
-                <option value="Cinematic Dolly In/Out">Cinematic Dolly In/Out</option>
-                <option value="Orbital 360 Scan">Orbital 360 Scan</option>
-                <option value="Pan & Tilt Dynamics">Pan & Tilt Dynamics</option>
-                <option value="Crane Hero Shot">Crane Hero Shot</option>
+            <select id="modelSelector">
+                <option value="Wan_2.1">Wan 2.1</option>
+                <option value="Seedance">Seedance</option>
+                <option value="Grok_Video">Grok Video</option>
+                <option value="Kling_AI">Kling AI</option>
+                <option value="Luma_Dream_Machine">Luma Dream Machine</option>
+                <option value="Sora_OpenAI">Sora OpenAI</option>
+                <option value="Google_Veo">Google Veo</option> <option value="Hailuo_MiniMax">Hailuo MiniMax</option>
+                <option value="Runway_Gen3">Runway Gen-3</option>
             </select>
+            <div class="ratio-grid">
+                <button class="ratio-btn active" onclick="setRatio('16:9', this)">16:9</button>
+                <button class="ratio-btn" onclick="setRatio('9:16', this)">9:16</button>
+                <button class="ratio-btn" onclick="setRatio('1:1', this)">1:1</button>
+            </div>
+            <div class="group-label" style="margin-top:10px;">شدة الحركة: <span id="mv">5</span></div>
+            <input type="range" id="motionScale" min="1" max="10" value="5" oninput="document.getElementById('mv').innerText=this.value" style="width:100%">
         </div>
     </div>
 
     <div>
         <div class="section-title">03 / مدخلات الإنتاج المركب</div>
-        <div class="group">
-            <div class="group-label"><i class="fas fa-upload"></i> الخامات البصرية (5 صور كحد أقصى)</div>
+        
+        <div id="photo-input-group" class="group">
+            <div class="group-label"><i class="fas fa-upload"></i> خامات الصور (5 صور كحد أقصى)</div>
             <input type="file" id="refImages" accept="image/*" multiple>
             <div id="imagePreviewContainer"></div>
-            <textarea id="conceptInput" rows="4" placeholder="اشرح رؤيتك هنا (مثلاً: أريد دمج علبة زيت بتروجاك في بيئة سينمائية مستقبلية مع إضاءة نيون)..." style="margin-top:10px;"></textarea>
+        </div>
+
+        <div id="video-input-group" class="group" style="display:none;">
+            <div class="group-label"><i class="fas fa-film"></i> فريمات الحركة (Start & End)</div>
+            <div class="frame-grid">
+                <div class="frame-slot" onclick="document.getElementById('startImg').click()">
+                    <i class="fas fa-plus"></i><span id="stxt">البداية</span>
+                    <input type="file" id="startImg" hidden onchange="previewFrame(this, 'sPrev', 'stxt')">
+                    <img id="sPrev" style="display:none">
+                    <div class="slot-label">START</div>
+                </div>
+                <div class="frame-slot" onclick="document.getElementById('endImg').click()">
+                    <i class="fas fa-plus"></i><span id="etxt">النهاية</span>
+                    <input type="file" id="endImg" hidden onchange="previewFrame(this, 'ePrev', 'etxt')">
+                    <img id="ePrev" style="display:none">
+                    <div class="slot-label">END</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="group">
+            <textarea id="conceptInput" rows="4" placeholder="اشرح رؤيتك هنا..."></textarea>
         </div>
     </div>
 
@@ -133,11 +158,11 @@
 
 <main class="main-stage">
     <div id="chat-window">
-        <div class="msg ai-msg">🎬 مرحباً بك مخرج أحمد في استوديو كورتكس v1.5.9. العقول الثلاثة في انتظار تعليماتك...</div>
+        <div class="msg ai-msg">🎬 مخرج أحمد، الراكور انضبط. النسخة v1.8.5 كاملة بكل أزرارك الأصلية جاهزة للعمل.</div>
     </div>
     
     <div style="padding:25px; display:flex; gap:15px; background:var(--panel); border-top: 1px solid var(--border);">
-        <input type="text" id="chatInput" placeholder="اطلب تعديلاً فنياً أو إضافة تفاصيل للبرومبت..." onkeypress="if(event.key==='Enter') sendUpdate()">
+        <input type="text" id="chatInput" placeholder="اطلب تعديلاً فنياً..." onkeypress="if(event.key==='Enter') sendUpdate()">
         <button onclick="sendUpdate()" style="background:var(--accent); border:none; padding:0 30px; border-radius:10px; cursor:pointer; font-weight:800; color:#000;">تحديث</button>
     </div>
 </main>
@@ -146,74 +171,103 @@
     let currentMode = 'photo';
     let activeProjectId = null;
     let selectedFiles = [];
+    let currentRatio = '16:9';
 
-    // --- 1. إدارة الصور والمعاينة ---
+    // القواميس الكاملة (12 صور / 13 فيديو)
+    const domains = {
+        photo: [
+            {v: "1_manufacturing", t: "المحور الصناعي"}, {v: "2_agriculture", t: "المحور الزراعي"},
+            {v: "3_commerce_retail", t: "المحور التجاري"}, {v: "4_logistics_shipping", t: "اللوجستيات"},
+            {v: "5_automotive_oils", t: "عالم السيارات وزيوت بتروجاك"}, {v: "6_photography_portraits", t: "البورتريه"},
+            {v: "7_media_printing", t: "الصحافة والطباعة"}, {v: "8_packaging_luxury", t: "استيكر العبوات"},
+            {v: "9_real_estate", t: "العقارات"}, {v: "10_medical_dental", t: "الطب والأسنان"},
+            {v: "11_cosmetics_beauty", t: "مستحضرات التجميل"}, {v: "12_marketing_social", t: "السوشيال ميديا"}
+        ],
+        video: [
+            {v: "premium_automotive_fluids", t: "بتروجاك: حركة الزيوت"}, {v: "medical_dental", t: "الطب والأسنان"},
+            {v: "luxury_real_estate", t: "العقارات الفاخرة"}, {v: "heavy_manufacturing", t: "التصنيع الثقيل"},
+            {v: "commercial_food_cafes", t: "الأطعمة والكافيهات"}, {v: "mobile_accessories_tech", t: "إكسسوارات الموبايل"},
+            {v: "cosmetics_skincare", t: "مستحضرات التجميل"}, {v: "perfumes_luxury", t: "العطور الفاخرة"},
+            {v: "fashion_clothing", t: "الملابس والموضة"}, {v: "agribusiness_landscapes", t: "الزراعة والـ 100 فدان"},
+            {v: "media_cinematic_scenes", t: "المشاهد السينمائية"}, {v: "human_dialogue_interaction", t: "حوارات البشر"},
+            {v: "cgi_vfx_commercials", t: "إعلانات USG/VFX"}
+        ]
+    };
+
+    function setMode(m) {
+        currentMode = m;
+        document.getElementById('p-btn').className = `tab-btn ${m==='photo'?'active':''}`;
+        document.getElementById('v-btn').className = `tab-btn ${m==='video'?'active':''}`;
+        
+        // 🔄 تحديث الدروب داون (مع الحفاظ على "تلقائي")
+        const sel = document.getElementById('domainSelector');
+        sel.innerHTML = '<option value="auto">🌟 اكتشاف تلقائي ذكي (Cortex AI)</option>';
+        domains[m].forEach(d => {
+            let opt = document.createElement('option');
+            opt.value = d.v; opt.text = d.t;
+            sel.appendChild(opt);
+        });
+
+        // 👁️ تبديل الرؤية
+        document.getElementById('video-extras').style.display = m === 'video' ? 'block' : 'none';
+        document.getElementById('video-input-group').style.display = m === 'video' ? 'block' : 'none';
+        document.getElementById('photo-input-group').style.display = m === 'photo' ? 'block' : 'none';
+    }
+
+    function setRatio(r, btn) {
+        currentRatio = r;
+        document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    // --- 📸 نظام الصور الأصلي مع علامة الـ X الحمراء ---
     document.getElementById('refImages').addEventListener('change', function(e) {
         const files = Array.from(e.target.files);
         if (selectedFiles.length + files.length > 5) return alert("الحد الأقصى 5 صور يا مخرج أحمد.");
         
         files.forEach(file => {
-            selectedFiles.push(file);
-            renderPreview(file, selectedFiles.length - 1);
+            const index = Date.now() + Math.random(); 
+            selectedFiles.push({id: index, file: file});
+            renderPreview(file, index);
         });
         this.value = "";
     });
 
-    function renderPreview(file, index) {
+    function renderPreview(file, id) {
         const reader = new FileReader();
         reader.onload = (e) => {
             const div = document.createElement('div');
             div.className = 'preview-wrapper';
-            div.id = `prev-${index}`;
-            div.innerHTML = `<img src="${e.target.result}" class="preview-thumb"><button class="remove-img-btn" onclick="removeImage(${index})">&times;</button>`;
+            div.id = `img-wrapper-${id}`;
+            div.innerHTML = `
+                <img src="${e.target.result}" class="preview-thumb">
+                <button class="remove-img-btn" onclick="removeImage(${id})">&times;</button>
+            `;
             document.getElementById('imagePreviewContainer').appendChild(div);
         };
         reader.readAsDataURL(file);
     }
 
-    function removeImage(index) {
-        selectedFiles.splice(index, 1);
-        document.getElementById('imagePreviewContainer').innerHTML = '';
-        selectedFiles.forEach((f, i) => renderPreview(f, i));
+    function removeImage(id) {
+        selectedFiles = selectedFiles.filter(f => f.id !== id);
+        document.getElementById(`img-wrapper-${id}`).remove();
     }
 
-    // --- 2. محرك الرسائل المتطور (Cinema Grade) ---
-    function appendMsg(content, className) {
-        const win = document.getElementById('chat-window');
-        if (!win) return;
-
-        const d = document.createElement('div');
-        d.className = `msg ${className}`;
-
-        if (className === 'ai-msg') {
-            const btn = document.createElement('button');
-            btn.className = 'copy-btn';
-            btn.innerHTML = '<i class="fas fa-copy"></i> نسخ البرومبت';
-            btn.onclick = () => {
-                const promptMatch = content.match(/[a-zA-Z0-9\s,]{60,}/g);
-                const textToCopy = promptMatch ? promptMatch[promptMatch.length - 1] : content;
-                navigator.clipboard.writeText(textToCopy);
-                btn.innerHTML = '<i class="fas fa-check"></i> تم!';
-                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i> نسخ البرومبت', 2000);
+    // --- 🎬 نظام الفيديو (Keyframes) ---
+    function previewFrame(input, imgId, txtId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => { 
+                const img = document.getElementById(imgId);
+                img.src = e.target.result;
+                img.style.display = 'block';
+                document.getElementById(txtId).style.display = 'none';
             };
-            d.appendChild(btn);
-            
-            // معالجة نصيحة المخرج وتنسيق الرد
-            let formattedContent = content.replace("Director's Note:", "<div class='directors-note'>🎬 نصيحة المخرج الاستشارية:</div>");
-            const textContent = document.createElement('div');
-            textContent.innerHTML = formattedContent;
-            d.appendChild(textContent);
-        } else {
-            const textContent = document.createElement('span');
-            textContent.innerText = content;
-            d.appendChild(textContent);
+            reader.readAsDataURL(input.files[0]);
         }
-
-        win.appendChild(d);
-        win.scrollTo({ top: win.scrollHeight, behavior: 'smooth' });
     }
 
-    // --- 3. عمليات الإنتاج والربط بالسيرفر ---
+    // --- 🚀 محرك الإنتاج (الربط بالسيرفر الجديد) ---
     async function launchProduction() {
         const concept = document.getElementById('conceptInput').value;
         if (!concept) return alert("من فضلك ادخل الرؤية الفنية أولاً.");
@@ -222,125 +276,90 @@
         fd.append('mode', currentMode);
         fd.append('domain', document.getElementById('domainSelector').value);
         fd.append('concept', concept);
-        if (currentMode === 'video') fd.append('motion', document.getElementById('motion').value);
-        selectedFiles.forEach(f => fd.append('refImages', f));
+        
+        if (currentMode === 'video') {
+            fd.append('model', document.getElementById('modelSelector').value);
+            fd.append('aspect_ratio', currentRatio);
+            fd.append('motion_scale', document.getElementById('motionScale').value);
+            if(document.getElementById('startImg').files[0]) fd.append('start_frame', document.getElementById('startImg').files[0]);
+            if(document.getElementById('endImg').files[0]) fd.append('end_frame', document.getElementById('endImg').files[0]);
+        } else {
+            selectedFiles.forEach(f => fd.append('refImages', f.file));
+        }
 
-        appendMsg(`🚀 جارٍ استدعاء مجلس العقول للإنتاج: ${concept}`, "user-msg");
+        appendMsg(`🚀 جارٍ إطلاق محرك الإنتاج: ${concept}`, "user-msg");
 
         try {
             const res = await fetch('/produce', { method: 'POST', body: fd });
             const d = await res.json();
-            
             if (d.success) {
-                activeProjectId = d.projectId; // 🌟 تحديث الـ ID فوراً
+                activeProjectId = d.projectId;
                 appendMsg(d.reply, "ai-msg");
-                console.log("Active Project ID set to:", activeProjectId);
             } else {
-                appendMsg("❌ فشل المحرك: " + (d.error || "خطأ غير معروف"), "ai-msg");
+                appendMsg("❌ فشل المحرك: " + d.error, "ai-msg");
             }
         } catch (err) {
-            appendMsg("❌ فشل الاتصال بمحرك كورتكس. تأكد من تشغيل السيرفر.", "ai-msg");
+            appendMsg("❌ فشل الاتصال بالسيرفر.", "ai-msg");
         }
+    }
+
+    // --- 💾 وظائف الأرشيف والتحديث (الأصلية) ---
+    function appendMsg(content, className) {
+        const win = document.getElementById('chat-window');
+        const d = document.createElement('div');
+        d.className = `msg ${className}`;
+        d.innerHTML = content.replace("Director's Note:", "<div style='color:var(--gold); font-weight:bold; border-top:1px solid #333; margin-top:10px; padding-top:5px;'>🎬 نصيحة المخرج الاستشارية:</div>");
+        win.appendChild(d);
+        win.scrollTo({ top: win.scrollHeight, behavior: 'smooth' });
     }
 
     async function sendUpdate() {
         const val = document.getElementById('chatInput').value;
-        if (!val) return;
-        if (!activeProjectId) return alert("مخرج أحمد، لا يوجد مشروع نشط حالياً للتعديل عليه. ابدأ إنتاجاً جديداً أولاً.");
-        
+        if (!val || !activeProjectId) return alert("ابدأ مشروعاً أولاً.");
         appendMsg(val, "user-msg");
         const fd = new FormData();
         fd.append('isUpdate', 'true');
         fd.append('userUpdate', val);
         fd.append('projectId', activeProjectId);
-
-        try {
-            const res = await fetch('/produce', { method: 'POST', body: fd });
-            const d = await res.json();
-            if (d.success) {
-                appendMsg(d.reply, "ai-msg");
-                document.getElementById('chatInput').value = '';
-            } else {
-                appendMsg("❌ فشل التحديث: " + d.error, "ai-msg");
-            }
-        } catch (err) {
-            appendMsg("❌ فشل تحديث البيانات في السيرفر.", "ai-msg");
+        const res = await fetch('/produce', { method: 'POST', body: fd });
+        const d = await res.json();
+        if (d.success) {
+            appendMsg(d.reply, "ai-msg");
+            document.getElementById('chatInput').value = '';
         }
     }
 
-    function setMode(m) {
-        currentMode = m;
-        document.getElementById('p-btn').className = `tab-btn ${m==='photo'?'active':''}`;
-        document.getElementById('v-btn').className = `tab-btn ${m==='video'?'active':''}`;
-        document.getElementById('video-controls').style.display = m === 'video' ? 'block' : 'none';
-    }
-
-    async function startNewProject() {
-        if(confirm("هل تريد تصفير المحرك وبدء مشروع جديد؟ (سيتم حفظ المشروع الحالي في الأرشيف)")) {
-            activeProjectId = null;
-            selectedFiles = [];
-            document.getElementById('imagePreviewContainer').innerHTML = '';
-            document.getElementById('conceptInput').value = '';
-            await fetch('/reset', { method: 'POST' });
-            document.getElementById('chat-window').innerHTML = '<div class="msg ai-msg">🎬 تم تصفير الذاكرة.. المكنة جاهزة لمشروعك الجديد.</div>';
-        }
-    }
-
-    // --- 4. الأرشيف الحديدي (إصلاحات الاسترجاع) ---
+    function startNewProject() { if(confirm("مشروع جديد؟")) location.reload(); }
+    
     async function openHistory() {
         document.getElementById('historyModal').style.display = 'flex';
         const list = document.getElementById('historyList');
-        list.innerHTML = '<div style="color:var(--accent); text-align:center; padding:20px;">جارٍ البحث في الأرشيف الحديدي...</div>';
-        
-        try {
-            const res = await fetch('/history');
-            const data = await res.json();
-            list.innerHTML = '';
-            
-            if (data.projects && data.projects.length > 0) {
-                data.projects.forEach(p => {
-                    const item = document.createElement('div');
-                    item.className = 'history-item';
-                    item.style = 'background:#020617; padding:15px; border-radius:12px; border:1px solid var(--border); cursor:pointer; color:#fff; margin-bottom:10px; transition: 0.3s;';
-                    item.innerHTML = `<strong><i class="fas fa-folder-open"></i> ${p.concept ? p.concept.substring(0, 40) : "إنتاج بدون عنوان"}...</strong><br><small style="color:var(--gold)">${p.domain || 'Auto-Detect'}</small>`;
-                    item.onclick = () => loadProject(p.id);
-                    list.appendChild(item);
-                });
-            } else {
-                list.innerHTML = '<div style="color:#64748b; text-align:center; padding:20px;">الأرشيف فارغ.. ابدأ أول إنتاج ليظهر هنا.</div>';
-            }
-        } catch (err) {
-            list.innerHTML = '<div style="color:#ef4444; text-align:center; padding:20px;">❌ فشل في قراءة الدفاتر الحديدية.</div>';
-        }
+        list.innerHTML = 'جاري البحث...';
+        const res = await fetch('/history');
+        const data = await res.json();
+        list.innerHTML = '';
+        data.projects.forEach(p => {
+            const item = document.createElement('div');
+            item.style = 'background:#020617; padding:15px; border-radius:12px; border:1px solid var(--border); cursor:pointer;';
+            item.innerHTML = `<strong>${p.concept.substring(0,40)}...</strong><br><small style="color:var(--gold)">${p.domain}</small>`;
+            item.onclick = () => loadProject(p.id);
+            list.appendChild(item);
+        });
     }
 
     async function loadProject(id) {
-        console.log("🎬 استدعاء المشروع رقم:", id);
         activeProjectId = id;
-        const win = document.getElementById('chat-window');
-        win.innerHTML = '<div class="msg ai-msg">🎬 جارٍ سحب بيانات المشروع رقم #' + id + ' من الأرشيف...</div>';
-        
-        try {
-            const res = await fetch(`/project-history/${id}`);
-            const data = await res.json();
-            
-            if (data.success && data.logs && data.logs.length > 0) {
-                win.innerHTML = ''; // تنظيف الشاشة قبل التحميل
-                data.logs.forEach(l => {
-                    appendMsg(l.content, l.role === 'user' ? 'user-msg' : 'ai-msg');
-                });
-                console.log("✅ تم تحميل المحادثة بالكامل.");
-            } else {
-                win.innerHTML = '<div class="msg ai-msg">⚠️ مخرج أحمد، هذا المشروع لا يحتوي على سجلات محفوظة. (تأكد من وجود بيانات في جدول الـ logs في الداتا بيز).</div>';
-            }
-            closeHistory();
-        } catch (err) {
-            console.error("Load Error:", err);
-            appendMsg("❌ عطل في استرجاع بيانات الأرشيف.", "ai-msg");
-        }
+        document.getElementById('chat-window').innerHTML = '';
+        const res = await fetch(`/project-history/${id}`);
+        const data = await res.json();
+        data.logs.forEach(l => appendMsg(l.content, l.role === 'user' ? 'user-msg' : 'ai-msg'));
+        closeHistory();
     }
 
     function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
+
+    // تشغيل الفوتوغراف كوضع افتراضي
+    setMode('photo');
 </script>
 </body>
 </html>

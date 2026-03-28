@@ -1,5 +1,5 @@
 {
-  "cortex_version": "1.8.5",
+  "cortex_version": "1.8.6",
   "director_id": "Ahmed_Cortex_Media",
   "input_logic": {
     "MODE_T2V": {
@@ -20,49 +20,63 @@
   },
   "model_profiles": {
     "Wan_2.1": {
-      "focus": "High_Motion_Fluidity_And_Textures",
-      "prompt_style": "Action_Descriptive",
-      "keywords": ["complex motion", "high-quality textures", "fluid physics", "stable anatomy"]
+      "focus": "Fluid_Dynamics_And_Realistic_Textures",
+      "prompt_style": "Action_Verb_Driven",
+      "keywords": ["viscous strands", "liquid gold physics", "dynamic motion blur", "tactile textures"],
+      "avoid": ["static", "stiff", "low-res"]
     },
     "Seedance": {
-      "focus": "Temporal_Consistency_And_Detail",
-      "prompt_style": "Detail_Oriented",
-      "keywords": ["stable movement", "consistent lighting", "high fidelity", "flicker-free"]
-    },
-    "Grok_Video": {
-      "focus": "Creative_Realism_And_Edge",
-      "prompt_style": "Raw_Aesthetic",
-      "keywords": ["hyper-realistic", "cinematic grit", "uncensored detail", "dramatic lighting"]
+      "focus": "Zero-Latent_Subject_Anchoring_And_Mechanical_Rigging",
+      "prompt_style": "Subject_Lock_Visual_Evolution",
+      "keywords": [
+        "high temporal stability", 
+        "pixel-perfect consistency", 
+        "non-deforming human anchor", 
+        "locked subject integrity",
+        "physically-aware morphing"],
+      "avoid": ["subject drifting", "face melting", "unstable anatomy", "jittery background"]
     },
     "Kling_AI": {
-      "focus": "Physical_Accuracy_And_Motion",
-      "prompt_style": "Action_Direct",
-      "keywords": ["high motion", "realistic physics", "fluid simulation", "large-scale movement"]
+      "focus": "Mechanical_Interlocking_And_Physics",
+      "prompt_style": "Physical_Logic",
+      "keywords": ["mechanical precision", "interlocking gears", "weight and friction", "high-impact action"],
+      "avoid": ["magical transformation", "soft edges"]
     },
-    "Luma_Dream_Machine": {
-      "focus": "Cinematic_Morphing",
-      "prompt_style": "Visual_Evolution",
-      "keywords": ["smooth transition", "dynamic lighting shift", "keyframe consistency"]
+    "Google_Veo_3": {
+      "focus": "Cinematic_Storytelling_And_Human_Interaction",
+      "prompt_style": "Natural_Language_Physics",
+      "keywords": ["naturalistic lighting", "stable human anchor", "cinematic atmosphere", "nuanced motion"],
+      "avoid": ["technical jargon", "unreal engine", "8k", "hyper-realistic"]
     },
     "Sora_OpenAI": {
-      "focus": "Complex_Storytelling_And_Environment",
-      "prompt_style": "Descriptive_Narrative",
-      "keywords": ["hyper-detailed texture", "atmospheric depth", "cinematic storytelling"]
+      "focus": "Complex_Environmental_Consistency",
+      "prompt_style": "Narrative_Descriptive",
+      "keywords": ["atmospheric depth", "spatially consistent", "complex background interaction"],
+      "avoid": ["isolated objects", "unmotivated movement"]
     },
-    "Google_Veo": {
-      "focus": "Professional_Cinematography",
-      "prompt_style": "Technical_Director",
-      "keywords": ["focal length", "camera gimbal move", "lighting temperature", "24fps"]
+    "Luma_Dream_Machine": {
+      "focus": "Smooth_Keyframe_Transitions",
+      "prompt_style": "Evolutionary_Path",
+      "keywords": ["seamless morph", "keyframe stability", "dynamic perspective shift"],
+      "avoid": ["jitter", "jump cuts"]
+    },
+    "Grok_Video": {
+      "focus": "Raw_Realism_And_High_Contrast",
+      "prompt_style": "Gritty_Cinematic",
+      "keywords": ["harsh shadows", "industrial grit", "raw footage aesthetic", "bold lighting"],
+      "avoid": ["over-polished", "glossy", "flat lighting"]
     },
     "Hailuo_MiniMax": {
-      "focus": "Ultra_Realistic_Humans_And_Faces",
-      "prompt_style": "Photorealistic",
-      "keywords": ["raw footage", "highly detailed skin", "natural movement", "human emotions"]
+      "focus": "Human_Emotion_And_Skin_Detail",
+      "prompt_style": "Portrait_Centric",
+      "keywords": ["micro-expressions", "pore-level detail", "natural eye movement", "realistic skin"],
+      "avoid": ["uncanny valley", "plastic textures"]
     },
-    "Runway_Gen3": {
-      "focus": "Artistic_Control_And_Stylization",
-      "prompt_style": "Creative_Brief",
-      "keywords": ["motion brush", "directed movement", "stylized rendering", "aesthetic control"]
+    "Higgsfield": {
+      "focus": "Social_Media_Style_Creative_Motion",
+      "prompt_style": "Artistic_Directed",
+      "keywords": ["stylized physics", "energetic camera", "trend-inspired visuals"],
+      "avoid": ["slow-paced", "corporate-stiff"]
     }
   },
   "universal_physics": {
@@ -150,7 +164,7 @@
       "vibe": "Impossible_Physics, Hyper-Reality, USG_Style",
       "lighting": "Dynamic_Environments, Sub-surface_Scattering",
       "camera": "Impossible_Camera_Paths, 360_Infinite_Loop",
-      "style": "UE5.4_Style, Octane_Render_Gloss"
+      "style": "Technical_Physics_Simulation"
     }
   },
   "logic_priority": "Ahmed_Manual_Override > Model_Profile > Domain_Science > Universal_Physics"
