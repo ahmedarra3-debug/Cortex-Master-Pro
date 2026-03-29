@@ -1,35 +1,26 @@
-🎬 Cortex Master Studio v1.6.0 "The Monolith"
-Cortex Master Studio هو محرك إنتاج إبداعي متكامل يعتمد على ذكاء اصطناعي ثلاثي العقول، مُصمم خصيصاً لرواد الأعمال والمخرجين الفنيين لدمج الواقعية التقنية بالخيال السريالي.
+# 🎬 Cortex Media Engine v1.9.0
+**The Smart AI-Powered Audiovisual Production Director**
 
-🚀 المميزات الجديدة في الإصدار v1.6.0
-🧠 نظام العقول الثلاثة (Triple-Brain System):
+---
 
-The Eye (Gemini 3.1): تحليل بصري فائق للصور والخامات والمجالات.
+## 🚀 عن المشروع (Overview)
+**كورتيكس** هو نظام إنتاج متكامل يجمع بين قوة الذكاء الاصطناعي وهندسة البصريات. تم تصميمه ليتحول من "فكرة إبداعية" إلى "برومبت تقني جراحي" لإنتاج الصور والفيديوهات الاحترافية، مع التركيز الخاص على منتجات المصانع والاعمال السينمائية والكثير من المميزات.
+## ✨ المميزات الرئيسية (Key Features)
+* **SafeMode:** صمام أمان ذكي يتعامل مع نقص البيانات ويمنع انهيار النظام.
+* **Triple-Brain Logic:** يستخدم 3 نماذج ذكاء اصطناعي (Gemini للرؤية، GPT-5.4 للهندسة، GPT-4o للنقد).
+* **Smart Archive:** نظام أرشفة تاريخي لاسترجاع وتعديل المشاريع السابقة بدقة.
+* **Domain Awareness:** فهم عميق لفيزياء المواد (كالزيوت و المعادن، الإضاءة السينمائية).
 
-The Architect (GPT-5.4): تحويل الرؤية الفنية إلى برومبتات إنجليزية تقنية بمعايير فيزيائية.
+## 🛠️ التقنيات المستخدمة (Tech Stack)
+* **Backend:** Node.js, Express.
+* **Database:** SQLite (Cortex Database System).
+* **AI Models:** Google Gemini 3.1 Flash, OpenAI GPT models.
+* **Frontend:** Modern HTML5/JS with Real-time Radar Tracking.
 
-The Consultant (GPT-4o): مراجعة الجودة النهائية وتقديم نصيحة المخرج (Director's Note).
+## 📦 التثبيت والتشغيل (Setup)
+1. قم بتركيب المكتبات: `npm install`
+2. أضف مفاتيحك في ملف `.env`.
+3. شغل المكنة: `node server.js`
 
-📂 الأرشيف الحديدي (SQLite Archive): حفظ آمن وشامل لجميع المشاريع والمحادثات للرجوع إليها في أي وقت.
-
-📚 القاموس التقني v2.1: دعم كامل لـ 12 مجالاً تخصصياً (بتروجاك للزيوت، الزراعة، العقارات، الميديا، وغيرها).
-
-🖼️ Cinema UI: واجهة مستخدم سينمائية تدعم معاينة الصور المتعددة، نسخ البرومبت بضغطة واحدة، وتنسيق ذهبي للنصائح الاستشارية.
-
-🛠️ تقنيات المشروع (Tech Stack)
-Backend: Node.js, Express.
-
-AI Models: Google Gemini 3.1 Flash, OpenAI GPT-5.4 & GPT-4o.
-
-Database: SQLite3.
-
-Frontend: HTML5, CSS3 (Cinema Grade), Vanilla JavaScript.
-
-📦 طريقة التشغيل
-قم بتحميل المستودع: git clone.
-
-قم بتثبيت المكتبات: npm install.
-
-أضف مفاتيحك السرية في ملف .env.
-
-أطلق المحرك: node server.js.
+---
+> **تطوير:**  أحمد رجب - Cortex Media Office (Borg El Arab) 🇪🇬
