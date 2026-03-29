@@ -43,6 +43,13 @@ app.post('/produce', upload.fields([
     let activeId = data.projectId; 
     let selectedDomain = data.domain; 
     const currentInput = isUpdate ? data.userUpdate : data.concept; 
+    // 📡 [الرادار المتأمن]: بيطبع الحالة ومنع الكراش لو المود مش مبعوث
+    const safeMode = (mode || 'photo').toUpperCase(); 
+    console.log("--------------------------------------------------");
+    console.log(`🎬 [REQUEST]: استلام طلب إنتاج جديد...`);
+    console.log(`🎯 [MODE]: ${safeMode}`); 
+    console.log(`📍 [DOMAIN]: ${selectedDomain || 'auto'}`);
+    console.log("--------------------------------------------------");
 
     try {
         // 🧠 1. استعادة الذاكرة الفنية للمشروع من الداتابيز
@@ -67,15 +74,22 @@ app.post('/produce', upload.fields([
         // 👁️ المرحلة الأولى: "العين البصيرة والمخرج الرؤيوي" (Gemini 3.1)
         const geminiModel = genAI.getGenerativeModel({ 
             model: "models/gemini-3.1-flash-lite-preview",
-            systemInstruction: `أنت "Cortex Master Director" وخبير البصريات العالمي. 
-            وظيفتك هي تحويل رؤية المخرج أحمد إلى "وصفة سحرية" (Visual Recipe) تجمع بين الدراما والفيزياء.
+            systemInstruction: `أنت "Cortex Master Director" وخبير البصريات العالمي ومصمم صوتيات (Foley) وخبير تلوين (Colorist). 
+            وظيفتك هي تحويل رؤية المخرج أحمد إلى "وصفة سحرية" (Audiovisual Recipe) تجمع بين الدراما والفيزياء والحواس.
 
-🚨 بروتوكول "العين الخبيرة":
-1. تحليل "روح الكادر": لا تصف الأجسام، بل صِف تفاعل الضوء والخامات (مثلاً: لزوجة الزيت، تشتت الرمل، انعكاس الفولاذ).
-2. لغة السينما التقنية: استخدم مصطلحات مثل (T-stop, Chromatic Aberration, Parallax, Subsurface Scattering).
-3. حارس الأصول (Sovereign Assets): حدد البطل (سيارة، منتج، كائن) وحافظ على ثباته الفيزيائي بكسلياً عبر الذاكرة.
-4. السرد التقني: إذا طلب المخرج تعديلاً، صِف كيف سيؤثر التغيير على "فيزياء المشهد" بالكامل دون أن تفقد الجوهر السابق.
-5. قدم الرؤية بالعربية بأسلوب سينمائي فاخر يُلهم المهندس والناقد.`
+            🚨 بروتوكول "العين والأذن الخبيرة":
+            🚨 سياق العمل الحالي: وضع الـ (${safeMode}).
+            🚨 بروتوكول الذكاء المنطقي:
+            1. إذا كان الوضع IMAGE: تجاهل وصف الصوت تماماً ولا تذكره في الرؤية. ركز فقط على فيزياء الضوء والخامات.
+            - إذا كان الوضع VIDEO: صِف أصوات الـ Foley المحيطة وتفاعل المواد صوتياً.
+            2. قدم الرؤية بالعربية بأسلوب سينمائي فاخر.
+            3. تحليل "روح الكادر": لا تصف الأجسام فقط، بل صِف تفاعل الضوء والخامات (مثلاً: لزوجة الزيت، تشتت الرمل، انعكاس الفولاذ).
+            4. لغة السينما التقنية: استخدم مصطلحات مثل (T-stop, Chromatic Aberration, Parallax, Subsurface Scattering).
+            5. هندسة الصوت (Soundscape): استنتج أصوات الـ Foley المحيطة بناءً على حركة المواد اذا كان الوضع فيديو (مثلاً: صوت تدفق السوائل الكثيفة، صرير المعادن، الهدوء السينمائي).
+            6. دراما التلوين (Color Grade): اقترح Palette لونية (مثل Teal & Orange, Noir, Vintage) تعزز المود العام للمشهد.
+            7. حارس الأصول (Sovereign Assets): حدد البطل وحافظ على ثباته الفيزيائي وصورته الذهنية عبر الذاكرة.
+            8. السرد التقني: إذا طلب المخرج تعديلاً، صِف كيف سيؤثر التغيير على "فيزياء وروح المشهد" بالكامل (بصرياً وصوتياً).
+            9. قدم الرؤية بالعربية بأسلوب سينمائي فاخر يُلهم المهندس والناقد.`
         });
 
         // 🔗 تفعيل الشات المعتمد على تاريخ المشروع الفعلي
@@ -102,13 +116,13 @@ app.post('/produce', upload.fields([
         const creativeVision = geminiResult.response.text(); 
 
         // 🏗️ المرحلة الثانية: المهندس التنفيذي (GPT-5.4) - "المخ المعماري v2.6"
-        const domainSpecs = mode === 'video' ? videoScience.visual_domains[selectedDomain] : imageScience.domains[selectedDomain];
+        const domainSpecs = safeMode === 'VIDEO' ? videoScience.visual_domains[selectedDomain] : imageScience.domains[selectedDomain];
         const modelProfile = videoScience.model_profiles[data.model] || videoScience.model_profiles["Wan_2.1"];
 
-        let architectSystem = `You are 'The Architect' for Cortex v2.6. 
-        🚨 MISSION: Convert the Master Director's Vision into a SURGICAL TECHNICAL PROMPT. 
+        let architectSystem = `You are 'The Architect' for Cortex v2.0.0. 
+        🚨 MISSION: Convert the Master Director's Vision into a SURGICAL AUDIOVISUAL TECHNICAL PROMPT. 
         🚨 STRICT RULE: 100% Technical ENGLISH only. NO FULL SENTENCES. Use Comma-Separated Tags.
-
+        🚨 MISSION: Surgical technical prompt construction for mode: ${safeMode}.
         1. DATA SOURCE (The Law):
         - Domain Science: ${JSON.stringify(domainSpecs)}.
         - Previous Architecture: ${previousTechnicalPrompt || "Initial Construction"}.
@@ -116,13 +130,14 @@ app.post('/produce', upload.fields([
 
         2. SURGICAL STRUCTURE (The Golden Order):
         - [CORE SUBJECT]: Focus on materials, weights, high-fidelity textures, Sovereign Assets.
-        - [DYNAMIC ACTION]: Physics, velocity, particle behavior, suspension, fluid dynamics.
-        - [LIGHTING/ATMOSPHERE]: Optical terms (Rim light, T-stop, Volumetric, Fresnel).
+        - [DYNAMIC ACTION]: If ${safeMode} is PHOTO: frozen physics. If VIDEO: motion dynamics.
+        - [COLOR PROFILE]: Cinematic LUTs, specific color grading, color science parameters. // 👈 New
+        - [AUDIO CUES]: 🚨 CRITICAL: Include this section ONLY if mode is VIDEO. If mode is IMAGE, DELETE this section completely.
+        - [LIGHTING/ATMOSPHERE]: Optical terms (Rim light, T-stop, Volumetric, Fresnel) Tailored to ${safeMode} optics.
         - [CAMERA PHYSICS]: Locked-off, gimbal, specific mm lens, cinematic parallax.
         - [QUALITY TAGS]: Global illumination, ACES, 8k, ray-tracing.
 
-        🚨 ANTI-NOISE: Delete "a, an, the, is, features, with, showcasing". Focus on RAW TEXTURE AND PHYSICS.`;
-
+        🚨 ANTI-NOISE: No sentences. Focus on RAW TEXTURE AND PHYSICS.`;
         const architectRes = await openai.chat.completions.create({
             model: "gpt-5.4", 
             messages: [{ role: "system", content: architectSystem }, { role: "user", content: creativeVision }]
@@ -132,17 +147,17 @@ app.post('/produce', upload.fields([
         const consultantRes = await openai.chat.completions.create({
             model: "gpt-4o",
             messages: [
-                { role: "system", content: `أنت "الناقد الاستراتيجي وكبير مخرجي VFX" لـ Cortex Media. 
-                🚨 مهمتك: مراجعة البرومبت التقني وضمان تطابقه مع "رؤية المدير" وقوانين الفيزياء.
+                { role: "system", content: `أنت "الناقد الاستراتيجي وكبير مخرجي VFX ومهندس جودة" لـ Cortex Media. 
+                🚨 مهمتك: مراجعة البرومبت التقني وضمان الكمال البصري (والصوتي في الفيديو فقط) واللوني.
 
-                    1. 📦 [Original Prompt]: اطبع برومبت المهندس داخل Code Block.
-                    2. 🔍 [Optical Critique]: انتقد الفيزياء الضوئية (Refraction, Fresnel, Caustics) وحركة الكاميرا. هل يوجد "رغي" (Fluff) يجب حذفه؟
-                    3. 🚀 [Cortex Optimized Version]: قدم نسخة "جراحية" مطورة. 
-                    ⚠️ شرط إلزامي: اتبع منطق v2.6 (No sentences, Comma-separated tags only). 
-                    ⚠️ الترتيب: [Subject], [Action], [Lighting], [Camera], [Quality].
-                    4. 🚫 [Negative Prompt]: قائمة "ممنوعات بصرية" دقيقة (مثل: morphing artifacts, jitter, floating pixels, ghosting).
-                    5. 🚨 [Strategic Battle]: قارن بين الموديلات في جراجك (${JSON.stringify(videoScience.model_profiles)}) ورشح الأنسب لفيزياء هذا المشهد تحديداً.
-                    6. 🎬 [Director's Note]: النصيحة النهائية بالمصرية المهنية القوية.` },
+                1. 📦 [Original Prompt]: اطبع برومبت المهندس داخل Code Block.
+                2. 🔍 [Audiovisual Critique]: انتقد الفيزياء الضوئية، التلوين، والشمولية الصوتية. هل الكود يخدم "روح المشهد"؟
+                3. 🚀 [Cortex Optimized Version]: قدم نسخة "جراحية" مطورة (Tags only) تتبع منطق v2.0.0.
+                4. 📊 [Technical Scorecard]: قيّم (0-10) في: (الواقعية، ثبات البكسلات، دراما اللون). 
+🚨 تنبيه منطقي: إذا كان الوضع IMAGE، لا تقيّم "دقة الصوت" نهائياً. إذا كان VIDEO، أضف تقييم (دقة الصوت).
+                5. 🚫 [Negative Prompt]: قائمة "ممنوعات بصرية وصوتية" دقيقة (مثل: morphing, audio clipping, ghosting).
+                6. 🚨 [Strategic Battle]: قارن بين الموديلات في جراجك (${JSON.stringify(videoScience.model_profiles)}) ورشح الأنسب لهذا التكوين.
+                7. 🎬 [Director's Note]: النصيحة النهائية بالمصرية المهنية القوية.` },
                 { role: "user", content: `الرؤية الإبداعية: ${creativeVision}\nالبرومبت الهندسي: ${technicalPrompt}` }
             ]
         });
@@ -153,7 +168,7 @@ app.post('/produce', upload.fields([
 
         if (!activeId) {
             activeId = await db.saveProject({
-                mode: mode, domain: selectedDomain, preset: data.model || "Static_v2", 
+                mode: mode || 'photo', domain: selectedDomain, preset: data.model || "Static_v2", 
                 motion: data.motion_scale || 'none', concept: data.concept
             });
         }
@@ -168,7 +183,48 @@ app.post('/produce', upload.fields([
     }
 });
 
-// باقي المسارات (History, Reset) تبقى كما هي في الكود الأصلي
+// ============================================================================
+// 📚 مسارات الأرشيف النهائية (Cortex Archive System - Fixed Logic)
+// ============================================================================
+
+// 1. جلب قائمة المشاريع (مطابق لطلب الـ index.html)
+app.get('/history', async (req, res) => {
+    try {
+        console.log("📂 [RADAR]: جاري استدعاء قائمة المشاريع للأرشيف...");
+        const projects = await db.getAllProjects(); 
+        
+        // 🚨 التعديل الجوهري: نبعت البيانات جوه كائن اسمه projects
+        res.json({ projects: projects }); 
+        
+        console.log(`✅ [SUCCESS]: تم إرسال ${projects.length} مشروع.`);
+    } catch (error) {
+        console.error("❌ عطل في جلب المشاريع:", error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 2. جلب سجلات مشروع معين (مطابق لطلب الـ index.html)
+app.get('/project-history/:id', async (req, res) => {
+    const projectId = req.params.id;
+    try {
+        console.log(`📜 [RADAR]: جاري استعادة سجلات المشروع ID: ${projectId}`);
+        const history = await db.getProjectHistory(projectId);
+        
+        // 🚨 التعديل الجوهري: نبعت البيانات جوه كائن اسمه logs
+        res.json({ logs: history });
+        
+        console.log(`✅ [SUCCESS]: تم تحميل سجلات المشروع بنجاح.`);
+    } catch (error) {
+        console.error("❌ عطل في جلب السجلات:", error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 3. إعادة ضبط (Reset)
+app.post('/reset', (req, res) => {
+    console.log("🧹 [RADAR]: جاري عمل Reset للمنصة...");
+    res.json({ success: true, message: "تمت إعادة الضبط" });
+});
 app.listen(3000, () => {
     console.log("--------------------------------------------------");
     console.log("🚀 Cortex Engine v2.5 - The Visionary Director Ready");

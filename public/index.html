@@ -321,6 +321,8 @@
         fd.append('isUpdate', 'true');
         fd.append('userUpdate', val);
         fd.append('projectId', activeProjectId);
+        fd.append('mode', currentMode); // عشان السيرفر يعرف هو بيحدث صورة ولا فيديو
+        fd.append('domain', document.getElementById('domainSelector').value);
         const res = await fetch('/produce', { method: 'POST', body: fd });
         const d = await res.json();
         if (d.success) {
