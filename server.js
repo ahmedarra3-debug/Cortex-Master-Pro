@@ -45,22 +45,29 @@ app.post('/produce', upload.fields([
     console.log("--------------------------------------------------");
 
     try {
-        // 🧠 أ. استدعاء الذاكرة (استخدام العامل المساعد 1)
         const { history, previousPrompt } = await getProjectContext(activeId);
-
         // 📚 ب. تجهيز العلم (الـ JSONs)
-        const domainSpecs = safeMode === 'VIDEO' ? videoScience.visual_domains[data.domain] : imageScience.domains[data.domain];
+        const science = safeMode === 'VIDEO' ? videoScience : imageScience;
+        const domains = safeMode === 'VIDEO' ? videoScience.visual_domains : imageScience.domains;
+
+        // لو المجال 'auto' أو مش لاقيه، خد أول مجال في القائمة كـ Default أو مجال عام
+        let domainSpecs = domains[data.domain] || domains['General'] || Object.values(domains)[0];
+
+        // تأكد إن فيه Label دايماً عشان الـ Console.log ميزعلش
+        if (!domainSpecs) domainSpecs = { label: "General Creative", science: "Standard Physics" };
+
+        // 🚨 سطر الجودة (مرة واحدة وبس يا ريس)
+        const qualitySpecs = safeMode === 'VIDEO' ? videoScience.global_quality.specs : imageScience.global_quality.specs;
 
         // 🚀 ج. إرسال المهمة لـ "غرفة العمليات" (Board)
-        // دي اللحظة اللي المخرج والمهندس والناقد بيجتمعوا فيها
         const result = await board.processProduction({
             concept: currentInput,
             history: history,
-            files: extractFiles(req.files, data.mode), // العامل المساعد 2
+            files: extractFiles(req.files, data.mode), 
             safeMode: safeMode,
             domainSpecs: domainSpecs,
             previousPrompt: previousPrompt,
-            qualitySpecs: imageScience.global_quality.specs,
+            qualitySpecs: qualitySpecs,
             modelProfiles: safeMode === 'VIDEO' ? videoScience.model_profiles : imageScience.model_profiles
         });
 
@@ -154,7 +161,8 @@ async function getProjectContext(projectId) {
     let prevPrompt = "";
     const lastAi = [...logs].reverse().find(l => l.role === 'ai');
     if (lastAi) {
-        const match = lastAi.content.match(/\[Original Prompt\]:?\s*([\s\S]*?)(?=\n\n🔍|$)/);
+       // الرادار الجديد بيبحث عن Master Prompt وبيهرب من العلامات التانية (📊 أو 🚫)
+        const match = lastAi.content.match(/\[Cortex Master Prompt\]:?\s*([\s\S]*?)(?=\n\n|📊|🚫|$)/);
         if (match) prevPrompt = match[1];
     }
     

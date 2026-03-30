@@ -1,8 +1,12 @@
-// استيراد الخدمات (الأقسام)
-const gemini = require('./gemini');
-const architect = require('./architect');
-const critic = require('./critic');
+const geminiService = require('./geminiService');
+const claudeService = require('./claudeService');
+const deepseekService = require('./deepseekService');
+const architectService = require('./architectService');
+const criticService = require('./criticService');
 
+/**
+ * 🎬 وظيفة المايسترو (The Orchestrator) - v2.1.0
+ */
 async function processProduction(params) {
     const { 
         concept, history, files, safeMode, 
@@ -10,36 +14,52 @@ async function processProduction(params) {
     } = params;
 
     console.log("--------------------------------------------------");
-    console.log(`🧠 [BOARD]: بدء معالجة الطلب في غرفة العمليات...`);
+    console.log(`🧠 [BOARD v2.1.0]: Mode: ${safeMode} | Domain: ${domainSpecs?.label || 'General'}`);
 
     try {
-        // 👁️ المرحلة الأولى: المخرج الرؤيوي (Gemini 3.1)
-        // بياخد: (النص، الذاكرة، الصور، المود)
-        const creativeVision = await gemini.getVision(concept, history, files, safeMode);
-        console.log("✅ [BOARD]: المخرج انتهى من صياغة الرؤية.");
+        // --- المرحلة الأولى: العصف الذهني المتوازي (السرعة) ---
+        console.log("🚀 [BOARD]: إطلاق الاستشاريين (Gemini, Claude, DeepSeek)...");
+        
+        const [soulReport, visualReport, physicsReport] = await Promise.all([
+            geminiService.getGeminiCreativeSoul(concept, history, files, domainSpecs),
+            claudeService.getClaudeVisualVision(concept, domainSpecs),
+            deepseekService.getDeepSeekPhysics(concept, domainSpecs)
+        ]);
 
-        // 🏗️ المرحلة الثانية: المهندس التنفيذي (GPT-5.4)
-        // بياخد: (الرؤية، مواصفات الدومين، البرومبت القديم، المود، كواليتي)
-        const technicalPrompt = await architect.generateTechnicalPrompt(
-            creativeVision, domainSpecs, previousPrompt, safeMode, qualitySpecs
+        const reports = { soul: soulReport, visual: visualReport, physics: physicsReport };
+
+        // --- المرحلة الثانية: المهندس التنفيذي (التنفيذ) ---
+        // 🚨 التعديل: بعتنا هنا الـ qualitySpecs عشان الدستور يكمل
+        console.log("🏛️ [BOARD]: المهندس يبني الهيكل التقني...");
+        const technicalPrompt = await architectService.getArchitectMasterPrompt(
+            concept, 
+            reports, 
+            domainSpecs, 
+            safeMode, 
+            previousPrompt,
+            qualitySpecs // 👈 ده اللي كان ناقص يا ريس!
         );
-        console.log("✅ [BOARD]: المهندس انتهى من التصميم التقني.");
 
-        // 👨‍🏫 المرحلة الثالثة: الناقد الاستراتيجي (GPT-4o)
-        // بياخد: (الرؤية، البرومبت الهندسي، بروفايلات الموديلات)
-        const critique = await critic.getFinalReview(creativeVision, technicalPrompt, modelProfiles);
-        console.log("✅ [BOARD]: الناقد وضع اللمسة النهائية والتقييم.");
+        // --- المرحلة الثالثة: الناقد الاستراتيجي (الرقابة) ---
+        console.log('🕵️ [BOARD]: الناقد يراجع "ملف القضية" بالكامل...'); 
+        
+        const auditOutput = await criticService.getCortexAudit(
+            concept, 
+            reports, 
+            technicalPrompt, 
+            modelProfiles
+        ); 
 
-        // تجميع النتائج "الزتونة" للعودة بها إلى السيرفر
         return {
-            vision: creativeVision,
+            vision: soulReport,
             technical: technicalPrompt,
-            finalReview: critique
+            finalReview: auditOutput,
+            detailedReports: reports 
         };
 
     } catch (error) {
         console.error("❌ [BOARD ERROR]:", error.message);
-        throw error; // بنرمي الخطأ للسيرفر عشان يتعامل معاه
+        throw error;
     }
 }
 
