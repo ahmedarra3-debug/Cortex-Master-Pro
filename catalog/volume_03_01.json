@@ -1,0 +1,51 @@
+{
+  "volume_info": {
+    "id": "VOL-03-01-ULTRA",
+    "title": "Cinematic Composition & Spatial Geometry",
+    "description": "Mathematical and artistic organization of elements within the frame."
+  },
+  "geometry_rules": [
+    {
+      "id": "COMP-01",
+      "name": "Golden Ratio (Fibonacci)",
+      "logic": "1.618 ratio spiral leading to the primary focal point.",
+      "use_case": "High-end luxury and organic visual flow."
+    },
+    {
+      "id": "COMP-02",
+      "name": "Rule of Thirds",
+      "logic": "3x3 grid alignment with subject on intersection points.",
+      "use_case": "Balanced storytelling and negative space for branding."
+    },
+    {
+      "id": "COMP-03",
+      "name": "Central Symmetry",
+      "logic": "Subject centered at (50,50) for absolute dominance.",
+      "use_case": "Hero shots, power, and high-impact product reveals."
+    },
+    {
+      "id": "COMP-04",
+      "name": "Leading Lines",
+      "logic": "Diagonal or converging lines pointing to the subject.",
+      "use_case": "Industrial depth, pipelines, and perspective shots."
+    },
+    {
+      "id": "COMP-05",
+      "name": "Frame Within Frame",
+      "logic": "Using environmental structures to border the subject.",
+      "use_case": "Creating depth and focus in complex scenes."
+    },
+    {
+      "id": "COMP-06",
+      "name": "Triangle Composition",
+      "logic": "Arranging three points of interest for stability and strength.",
+      "use_case": "Grouped products or multi-element industrial setups."
+    },
+    {
+      "id": "COMP-07",
+      "name": "Heavy Negative Space",
+      "logic": "Subject occupying less than 20% of the frame.",
+      "use_case": "Minimalist luxury, isolation, and premium feel."
+    }
+  ]
+}

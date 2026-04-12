@@ -1,0 +1,30 @@
+{
+  "volume_info": { "id": "VOL-05-03", "title": "Lifestyle, Luxury & Professional Services" },
+  "domains": [
+    {
+      "id": "9_real_estate", "type": "photo",
+      "logic": "Ultra-wide perspective (14mm). Straight verticals, balanced interior/exterior light.",
+      "keywords": "Architecture, space, wide view, luxury property."
+    },
+    {
+      "id": "luxury_real_estate", "type": "video",
+      "logic": "Smooth gimbal walkthroughs. Focus on flow of space and 'Hero' architectural features.",
+      "keywords": "Steadicam, mansion, high-end living, estate reveal."
+    },
+    {
+      "id": "10_medical_dental", "type": "photo",
+      "logic": "Clinical white balance (6500K). High-key lighting, sterile aesthetics, trust-building.",
+      "keywords": "Dental implants, medical tech, surgery, clinical precision."
+    },
+    {
+      "id": "commercial_food_cafes", "type": "video",
+      "logic": "Extreme macro of steam, texture, and pouring. Warm inviting tones (Teal & Orange).",
+      "keywords": "Coffee, sizzling food, appetizing, lifestyle."
+    },
+    {
+      "id": "cosmetics_skincare", "type": "video",
+      "logic": "Soft 'Beauty' lighting. Focus on fluid motion of creams and skin luminescence.",
+      "keywords": "Glow, skin, luxury cosmetics, ethereal lighting."
+    }
+  ]
+}

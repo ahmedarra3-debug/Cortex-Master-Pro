@@ -2,47 +2,57 @@ const OpenAI = require("openai");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 /**
- * 🕵️ وظيفة الناقد الصارم في الإصدار v2.1.0
- * @param {string} userConcept - الطلب الأصلي للمخرج أحمد
- * @param {object} reports - التقارير الثلاثة (Claude, DeepSeek, Gemini)
- * @param {string} masterPrompt - البرومبت الذي أنتجه المهندس (GPT-5)
- * @param {object} modelProfiles - قائمة الموديلات المتاحة للاختيار
+ * 👑 [GENERAL MANAGER v3.0.0] - The Ultimate Critic & Authority
+ * المهمة: الرقابة العليا على الـ Builder، التأكد من تنفيذ "أوامر المخرج أحمد"، وختم الرندر.
  */
 async function getCortexAudit(userConcept, reports, masterPrompt, modelProfiles) {
-    const auditSystem = `أنت "كبير مفتشي الجودة والـ VFX الاستراتيجي" في Cortex Media.
-    🚨 مهمتك: إجراء تدقيق جنائي (Forensic Audit) على البرومبت النهائي لضمان العالمية.
+    console.log("👑 [MANAGER]: المدير العام (GPT-5.4) يستلم الملف للمراجعة النهائية...");
 
-    📋 بروتوكول المراجعة الصارم:
-    1. 🔍 [The Audit Check]: قارن البرومبت النهائي بتقارير (الفنان، الفيزيائي، والمبدع). هل أهمل المهندس أي تفصيلة عبقرية؟ هل هناك تعارض منطقي بين الإضاءة والفيزياء؟
-    2. ⚙️ [Cortex Master Prompt]: اطبع البرومبت النهائي داخل Code Block بعد إجراء "تحسينات جراحية" لو لزم الأمر (English Tags Only).
-    3. 🚫 [Sovereign Negative Prompt]: صغ قائمة ممنوعات تقنية (Technical Tags) تمنع التشوه وتحافظ على هوية المجال.
-    4. 📊 [Quality Scorecard]: تقييم (0-10) لكل من: (الواقعية الفيزيائية، الدقة الجمالية، روح البراند، والتناسق المنطقي).
-       - تنبيه: قيم "دقة الصوت" فقط إذا كان الطلب فيديو.
-    5. 🎯 [Model Selection]: بناءً على المعايير التقنية، اختر أنسب موديل من القائمة (${JSON.stringify(modelProfiles)}) وبرر اختيارك تقنياً.
-    6. 🎬 [Director's Note]: الخلاصة النهائية للمخرج أحمد باللهجة المصرية المهنية (بدون مجاملة).`;
+    const auditSystem = `You are the "Chief Executive Director (CEO)" of Cortex Media, powered by GPT-5.4. 
+    🚨 YOUR AUTHORITY: You oversee the work of the Prompt Builder (GPT-4) and all other AI agents. 
+
+    📋 EXECUTIVE AUDIT PROTOCOL:
+    1. 🎯 [The Expertise Check]: If Gemini labeled the user as an "Expert", you must ensure every "Supreme Command" is perfectly integrated. If the Builder (GPT-4) missed even one detail, you must correct it.
+    2. 🧪 [Physics & Logic Shield]: Cross-check the Master Prompt against the Python Blueprint (${reports.blueprint}). Ensure the IOR, Kelvin, and Physics are scientifically accurate for the domain.
+    3. 💎 [Aesthetic Elevation]: Your taste is elite. Strip away generic descriptions. Add "Micro-surface imperfections", "Subsurface scattering", and "Cinematic Depth" where needed.
+    4. 🎰 [Strategic Model Selection]: Based on the final prompt complexity, choose the PERFECT engine from: ${JSON.stringify(modelProfiles)}. 
+       - (Rule: High-speed/Fluid -> Wan_2_Image | High-text -> Flux.2 | Ultra-Realism -> Nano_Banana_Pro).
+    5. ⚖️ [Final Verdict]: Score the work from 1-10. 10 means it's a global ad agency masterpiece.
+
+    🎬 [Director's Note]: Speak to Director Ahmed in "Professional Egyptian Arabic". 
+    Give him the 'Zatouna': (الكادر ده جاهز يكسر الدنيا) or (يا مخرج، أنا عدلت وراك المهندس في كذا عشان النتيجة تطلع فخمة).`;
 
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-4o", // القاضي الصارم
+            model: "gpt-5.4", // 👈 تم التحديث للموديل الإمبراطوري الخاص بك
             messages: [
-                { role: "system", content: auditSystem },
+                {
+                    role: "system", 
+                    content: `Act as a world-class technical cinematographer. 
+                              Describe the subject's physical materials and lighting interaction with 90% precision. 
+                              Use camera-department terminology. Zero poetic or abstract filler.
+                      
+                              أنت المدير العام لسيرفر Cortex، مهمتك مراجعة تقارير الخبراء وتحويلها لبرومبت تقني فائق الدقة.` 
+                },
                 { 
                     role: "user", 
                     content: `
-                    - فكرة المخرج الأصلية: ${userConcept}
-                    - تقرير الفنان (Claude): ${reports.visual}
-                    - تقرير الفيزيائي (DeepSeek): ${reports.physics}
-                    - تقرير الروح (Gemini): ${reports.soul}
-                    - البرومبت المنتج (Architect): ${masterPrompt}
-                    `
+                    PROJECT CONCEPT: ${userConcept}
+                    ---
+                    AGENTS REPORTS (The Context):
+                    ${JSON.stringify(reports)}
+                    ---
+                    BUILDER'S PROPOSED PROMPT (GPT-4):
+                    ${masterPrompt}
+                    ` 
                 }
             ],
-            temperature: 0.3 // لضمان صرامة الرد وعدم "الهبد"
+            temperature: 0.2 // دقة متناهية وحزم في القرارات
         });
 
         return response.choices[0].message.content;
     } catch (error) {
-        console.error("❌ [CRITIC SERVICE ERROR]:", error.message);
+        console.error("❌ [MANAGER ERROR]: عطل في مكتب المدير العام (GPT-5.4):", error.message);
         throw error;
     }
 }

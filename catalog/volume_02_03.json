@@ -1,0 +1,31 @@
+{
+  "volume_info": {
+    "id": "VOL-02-03",
+    "title": "Absorbing Surfaces & Organic Textures",
+    "description": "Non-reflective materials logic (Fabrics, Leather, Matte Plastics)."
+  },
+  "absorption_physics": {
+    "albedo_logic": "High light absorption, low specular bounce.",
+    "micro_fiber_render": "Enabled for realistic sheen on fabrics."
+  },
+  "soft_materials": [
+    {
+      "id": "SFT-01",
+      "name": "Premium Black Leather",
+      "properties": {
+        "roughness": "0.4",
+        "specular_sheen": "Soft / Oily luster",
+        "grain_texture": "Pebbled / Natural"
+      }
+    },
+    {
+      "id": "SFT-02",
+      "name": "Matte Industrial Plastic",
+      "properties": {
+        "roughness": "0.8",
+        "sheen": "None / Diffuse",
+        "impact": "Non-distracting background element"
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "volume_info": { "id": "VOL-05-02", "title": "Cinematic Media & Future Tech" },
+  "domains": [
+    {
+      "id": "media_cinematic_scenes", "type": "video",
+      "logic": "Anamorphic flares, high dynamic range, storytelling through light and shadow.",
+      "keywords": "Movie look, dramatic lighting, anamorphic bokeh, narrative."
+    },
+    {
+      "id": "cgi_vfx_commercials", "type": "video",
+      "logic": "Hyper-realistic integration. Perfect tracking, physics-based particles, and neon accents.",
+      "keywords": "VFX, CGI, digital twin, futuristic, neon pulse."
+    },
+    {
+      "id": "mobile_accessories_tech", "type": "video",
+      "logic": "Clean studio macro. Focus on build quality, tactile clicks, and sleek glass/metal.",
+      "keywords": "Gadgets, tech, macro details, sleek design."
+    },
+    {
+      "id": "6_photography_portraits", "type": "photo",
+      "logic": "Rembrandt lighting. Focus on eye catchlights and skin texture (Raw realism).",
+      "keywords": "Humanity, emotion, sharp eyes, shallow depth of field."
+    },
+    {
+      "id": "7_media_printing", "type": "photo",
+      "logic": "Focus on ink-on-paper texture, CMYK precision, and mechanical precision of presses.",
+      "keywords": "Printing, texture, ink, industrial media."
+    }
+  ]
+}

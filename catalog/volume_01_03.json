@@ -1,0 +1,49 @@
+{
+  "volume_info": {
+    "id": "VOL-01-03-ULTRA",
+    "title": "Digital Color Science & Brand Integrity",
+    "description": "Advanced color theory and post-processing protocols for Cortex Media."
+  },
+  "color_physics": {
+    "color_space": "ACES (Academy Color Encoding System) - Workflow Reference",
+    "bit_depth": "16-bit Linear for maximum dynamic range",
+    "gamma_curves": {
+      "standard": "sRGB / Rec.709",
+      "cinematic": "Log-C / S-Log3",
+      "display": "Gamma 2.4 (Broadcast Standard)"
+    }
+  },
+  "color_profiles": [
+    {
+      "id": "CLR-01",
+      "name": "Cinematic Teal & Orange (High-End)",
+      "logic": "Complementary Contrast: Orange highlights (metal/skin) vs Deep Teal shadows.",
+      "visual_impact": "Adds depth and expensive cinematic feel.",
+      "parameters": { "saturation": 1.1, "contrast": "S-Curve", "midtones": "Neutral" }
+    },
+    {
+      "id": "CLR-02",
+      "name": "Industrial Silver & Steel",
+      "logic": "Monochromatic focus with emphasis on metallic reflections and high-frequency textures.",
+      "visual_impact": "Professional, clean, and clinical. Perfect for chemical/oil industry.",
+      "parameters": { "saturation": 0.6, "blue_tint_shadows": "Enabled", "sharpness": "Aggressive" }
+    },
+    {
+      "id": "CLR-03",
+      "name": "Vibrant Commercial Gloss",
+      "logic": "True-to-life colors, white balance perfection, and high micro-contrast.",
+      "visual_impact": "Clean advertising look, looks 'fresh' and 'trustworthy'.",
+      "parameters": { "white_balance": "Perfect 6500K", "delta_e_accuracy": "< 2.0" }
+    }
+  ],
+  "brand_consistency_protocol": {
+    "delta_e_limit": 2.0,
+    "instruction": "Maintain absolute color accuracy for brand logos. No color shifting allowed on primary brand assets.",
+    "white_point": "D65 (Standard Illuminant)"
+  },
+  "post_processing_engine": {
+    "film_grain": "35mm Fine Grain (Intensity: 0.2) for organic texture.",
+    "chromatic_aberration_fix": "Applied: 100% suppression.",
+    "sharpening_logic": "Unsharp Mask: Radius 1.0, Amount 50% (Avoid AI haloing)."
+  }
+}

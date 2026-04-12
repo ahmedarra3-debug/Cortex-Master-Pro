@@ -1,0 +1,29 @@
+{
+  "volume_info": { "id": "VOL-04-02", "title": "Natural & Outdoor Environments" },
+  "external_locations": [
+    {
+      "id": "EXT-01",
+      "name": "Sahara Noon (Extreme Sun)",
+      "logic": "Harsh top-down sun, heat haze (mirage), golden sand reflections, high contrast.",
+      "atmosphere": "Dust particles, clear blue sky, hard shadows."
+    },
+    {
+      "id": "EXT-02",
+      "name": "Nordic Frozen Tundra",
+      "logic": "Soft overcast light, snow-covered ground, ice crystals, cool blue tints.",
+      "atmosphere": "Breath mist, falling snowflakes, 5500K color temp."
+    },
+    {
+      "id": "EXT-03",
+      "name": "Amazon Rain Forest",
+      "logic": "Dappled sunlight through leaves (Gobo effect), high humidity, wet mossy surfaces.",
+      "atmosphere": "Volumetric sunbeams, tropical mist, deep green shadows."
+    },
+    {
+      "id": "EXT-04",
+      "name": "Urban Tokyo Night",
+      "logic": "Asphalt after rain, neon sign reflections, bokeh of city lights in background.",
+      "atmosphere": "Light smog, electric blue and hot pink hues."
+    }
+  ]
+}

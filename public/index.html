@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cortex Master Studio | Imbraotoriyet v1.8.5</title>
+    <title>Cortex Master Studio | Imbraotoriyet v3.0.0</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
@@ -79,7 +79,7 @@
 <aside class="sidebar">
     <div class="brand">
         <h2>CORTEX MASTER</h2>
-        <small>IMBRAOTORIYET v1.8.5</small>
+        <small>IMBRAOTORIYET v3.0.0</small>
     </div>
 
     <div>
@@ -159,7 +159,7 @@
 
 <main class="main-stage">
     <div id="chat-window">
-        <div class="msg ai-msg">🎬 مخرج أحمد، الراكور انضبط. النسخة v1.8.5 كاملة بكل أزرارك الأصلية جاهزة للعمل.</div>
+        <div class="msg ai-msg">🎬 مخرج أحمد، الراكور انضبط. النسخة v3.0.0 كاملة بكل أزرارك الأصلية جاهزة للعمل.</div>
     </div>
     
     <div style="padding:25px; display:flex; gap:15px; background:var(--panel); border-top: 1px solid var(--border);">
@@ -277,6 +277,7 @@
         fd.append('mode', currentMode);
         fd.append('domain', document.getElementById('domainSelector').value);
         fd.append('concept', concept);
+        fd.append('uiSelections', JSON.stringify({}));
         
         if (currentMode === 'video') {
             fd.append('model', document.getElementById('modelSelector').value);
@@ -309,7 +310,9 @@
         const win = document.getElementById('chat-window');
         const d = document.createElement('div');
         d.className = `msg ${className}`;
-        d.innerHTML = content.replace("Director's Note:", "<div style='color:var(--gold); font-weight:bold; border-top:1px solid #333; margin-top:10px; padding-top:5px;'>🎬 نصيحة المخرج الاستشارية:</div>");
+        let formatted = content.replace("Director's Note:", "<div style='color:var(--gold); font-weight:bold; border-top:1px solid #333; margin-top:10px; padding-top:5px;'>🎬 نصيحة المخرج الاستشارية (GPT-5.4):</div>");
+        formatted = formatted.replace("[TECHNICAL TAGS]", "<div style='color:var(--accent); font-weight:bold; margin-top:10px;'>🛠️ المواصفات التقنية للهندسة الفيزيائية:</div>");
+        d.innerHTML = formatted;
         win.appendChild(d);
         win.scrollTo({ top: win.scrollHeight, behavior: 'smooth' });
     }
@@ -324,6 +327,7 @@
         fd.append('projectId', activeProjectId);
         fd.append('mode', currentMode); // عشان السيرفر يعرف هو بيحدث صورة ولا فيديو
         fd.append('domain', document.getElementById('domainSelector').value);
+        fd.append('uiSelections', JSON.stringify({}));
         const res = await fetch('/produce', { method: 'POST', body: fd });
         const d = await res.json();
         if (d.success) {

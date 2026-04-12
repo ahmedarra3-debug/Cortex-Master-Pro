@@ -1,0 +1,23 @@
+{
+  "volume_info": { "id": "VOL-04-03", "title": "Industrial & Scientific Environments" },
+  "industrial_sets": [
+    {
+      "id": "IND-01",
+      "name": "High-Tech Lab / Clean Room",
+      "logic": "Cool fluorescent lighting, stainless steel tables, glass beakers, clinical white.",
+      "atmosphere": "Zero dust, sterile atmosphere, blue-tinted shadows."
+    },
+    {
+      "id": "IND-02",
+      "name": "Heavy Duty Factory Floor",
+      "logic": "Large pipes, yellow safety railings, concrete floor with oil stains, industrial sparks.",
+      "atmosphere": "Gritty, metallic dust, warm amber localized lights."
+    },
+    {
+      "id": "IND-03",
+      "name": "Shipping Port / Logistics Hub",
+      "logic": "Stacked containers, giant cranes, massive ships, harsh coastal sunlight.",
+      "atmosphere": "Salty air haze, industrial scale, ocean background."
+    }
+  ]
+}

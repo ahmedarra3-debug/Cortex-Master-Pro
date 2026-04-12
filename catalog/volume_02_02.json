@@ -1,0 +1,36 @@
+{
+  "volume_info": {
+    "id": "VOL-02-02",
+    "title": "Liquid Physics & Chemical Viscosity",
+    "description": "Optical properties of fluids, transparency, and surface tension."
+  },
+  "fluid_dynamics": {
+    "refractive_index_table": {
+      "engine_oil": 1.48,
+      "industrial_coolant": 1.35,
+      "pure_water": 1.33
+    },
+    "subsurface_scattering": "Enabled for thick oils to ensure light depth."
+  },
+  "liquid_types": [
+    {
+      "id": "LIQ-01",
+      "name": "Amber Engine Oil (Viscous)",
+      "properties": {
+        "viscosity": "High / Slow flow",
+        "transparency": "Semi-opaque (Golden/Amber)",
+        "surface_tension": "High (Defined meniscus at edges)",
+        "bubbles": "Micro-air bubbles allowed near the surface"
+      }
+    },
+    {
+      "id": "LIQ-02",
+      "name": "Industrial Chemical (Clear/Colored)",
+      "properties": {
+        "viscosity": "Low / Water-like",
+        "transparency": "Crystal Clear",
+        "caustics": "Sharp light refractions on the ground"
+      }
+    }
+  ]
+}

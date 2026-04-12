@@ -1,0 +1,23 @@
+{
+  "volume_info": { "id": "VOL-04-01", "title": "Studio Lighting Environments" },
+  "studio_setups": [
+    {
+      "id": "STU-01",
+      "name": "High-Key Clean White",
+      "logic": "Shadowless environment, pure white background, soft global illumination.",
+      "vibe": "Medical, clinical, ultra-clean chemicals."
+    },
+    {
+      "id": "STU-02",
+      "name": "Luxury Dark (Black Ice)",
+      "logic": "Reflective black floor, single rim light, heavy negative fill.",
+      "vibe": "Premium oils, automotive luxury, mysterious power."
+    },
+    {
+      "id": "STU-03",
+      "name": "Cyberpunk Neon Studio",
+      "logic": "Dual-tone lighting (Cyan & Magenta), backlight glow, wet floor reflections.",
+      "vibe": "High-tech additives, future energy, edgy branding."
+    }
+  ]
+}

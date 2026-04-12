@@ -23,7 +23,7 @@ const videoScience = JSON.parse(fs.readFileSync('cortex_science.json', 'utf8'));
 app.use(express.json()); 
 app.use(express.static('public')); 
 
-// 🎬 5. الراوت الرئيسي (Cortex Engine v2.5 - The Visionary Director)
+// 🎬 5. الراوت الرئيسي (Cortex Engine v3.0.0 - The Visionary Director)
 app.post('/produce', upload.fields([
     { name: 'refImages', maxCount: 5 }, 
     { name: 'start_frame', maxCount: 1 }, 
@@ -31,6 +31,8 @@ app.post('/produce', upload.fields([
 ]), async (req, res) => {
     
     const data = req.body; 
+    // 💡 التعديل: استقبال الاختيارات لو مبعوتة، أو فرض كائن فارغ عشان المكنة متقفش
+    const uiSelections = data.uiSelections ? JSON.parse(data.uiSelections) : {}; 
     const isUpdate = (data.isUpdate === "true"); 
     const mode = data.mode; 
     let activeId = data.projectId; 
@@ -68,6 +70,7 @@ app.post('/produce', upload.fields([
             domainSpecs: domainSpecs,
             previousPrompt: previousPrompt,
             qualitySpecs: qualitySpecs,
+            uiSelections: uiSelections, // 👈 السلك الجديد وصل هنا
             modelProfiles: safeMode === 'VIDEO' ? videoScience.model_profiles : imageScience.model_profiles
         });
 
@@ -138,7 +141,7 @@ app.post('/reset', (req, res) => {
 });
 app.listen(3000, () => {
     console.log("--------------------------------------------------");
-    console.log("🚀 Cortex Engine v2.5 - The Visionary Director Ready");
+    console.log("🚀 Cortex Engine v3.0.0 - The Visionary Director Ready");
     console.log("--------------------------------------------------");
 });
 // ============================================================================
@@ -162,7 +165,7 @@ async function getProjectContext(projectId) {
     const lastAi = [...logs].reverse().find(l => l.role === 'ai');
     if (lastAi) {
        // الرادار الجديد بيبحث عن Master Prompt وبيهرب من العلامات التانية (📊 أو 🚫)
-        const match = lastAi.content.match(/\[Cortex Master Prompt\]:?\s*([\s\S]*?)(?=\n\n|📊|🚫|$)/);
+        const match = lastAi.content.match(/\[TECHNICAL TAGS\]:?\s*([\s\S]*?)(?=\n\n|📊|🚫|$|🎬)/);
         if (match) prevPrompt = match[1];
     }
     

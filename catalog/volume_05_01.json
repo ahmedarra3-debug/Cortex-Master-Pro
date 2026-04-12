@@ -1,0 +1,35 @@
+{
+  "volume_info": { "id": "VOL-05-01", "title": "Heavy Industry & Agribusiness Mastery" },
+  "domains": [
+    {
+      "id": "1_manufacturing", "type": "photo",
+      "logic": "Focus on scale, metallic grit, and industrial sparks. Use 'Titan' framing.",
+      "keywords": "Steel, heavy machinery, sparks, raw power."
+    },
+    {
+      "id": "heavy_manufacturing", "type": "video",
+      "logic": "Slow kinetic pans across assembly lines. Focus on repetitive mechanical rhythm.",
+      "keywords": "Hydraulics, conveyor belts, massive scale, rhythmic motion."
+    },
+    {
+      "id": "5_automotive_oils", "type": "photo",
+      "logic": "The 'Amber Gold' look. Backlighting through liquid, sharp focus on label integrity.",
+      "keywords": "PetroJac, premium viscosity, lubricant purity, engine protection."
+    },
+    {
+      "id": "premium_automotive_fluids", "type": "video",
+      "logic": "120fps slow-motion of viscous fluid pouring. Capturing golden light refractions.",
+      "keywords": "Pouring oil, liquid gold, high-viscosity, smooth flow."
+    },
+    {
+      "id": "2_agriculture", "type": "photo",
+      "logic": "Aerial perspectives (Bird's Eye). Focus on geometric crop patterns and soil texture.",
+      "keywords": "Tomato farms, desert reclamation, fertile soil, harvest."
+    },
+    {
+      "id": "agribusiness_landscapes", "type": "video",
+      "logic": "Cinematic drone sweeps at Golden Hour. Focus on 100-acre scale and irrigation life.",
+      "keywords": "Irrigation, vast fields, farming technology, horizon reveal."
+    }
+  ]
+}

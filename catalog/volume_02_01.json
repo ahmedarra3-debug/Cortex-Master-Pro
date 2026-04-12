@@ -1,0 +1,47 @@
+{
+  "volume_info": {
+    "id": "VOL-02-01",
+    "title": "Metal Physics & Reflective Surfaces",
+    "description": "Interaction of light with conductive materials (Chrome, Steel, Aluminum)."
+  },
+  "metallic_constants": {
+    "fresnel_effect": "Strong at grazing angles. Highlights become 100% reflective at edges.",
+    "specular_workflow": "Metallic-Roughness Standard",
+    "micro_surface": "Micro-scratches and imperfections for realism (Anisotropy)."
+  },
+  "material_types": [
+    {
+      "id": "MET-01",
+      "name": "Polished Chrome / Mirror Steel",
+      "properties": {
+        "roughness": "0.02 - 0.05",
+        "metalness": "1.0",
+        "reflection_type": "Sharp / Specular"
+      },
+      "visual_note": "Perfect for premium bottle caps and high-end machinery parts."
+    },
+    {
+      "id": "MET-02",
+      "name": "Brushed Aluminum / Industrial Steel",
+      "properties": {
+        "roughness": "0.3 - 0.5",
+        "anisotropy": "Directional blurred reflections",
+        "metalness": "1.0"
+      },
+      "visual_note": "Best for industrial canisters and heavy-duty PetroJac equipment."
+    },
+    {
+      "id": "MET-03",
+      "name": "Raw Cast Iron / Dark Metal",
+      "properties": {
+        "roughness": "0.7 - 0.9",
+        "texture": "Grainy / Pitted surface",
+        "color_shift": "Dark Grey / Carbon"
+      }
+    }
+  ],
+  "reflection_logic": {
+    "environment_mapping": "High Dynamic Range (HDRI) integration required.",
+    "glint_control": "Zero white-out pixels on metallic edges."
+  }
+}

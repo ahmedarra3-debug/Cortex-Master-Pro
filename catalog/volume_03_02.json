@@ -1,0 +1,51 @@
+{
+  "volume_info": {
+    "id": "VOL-03-02-ULTRA",
+    "title": "Camera Angles & Psychological Impact",
+    "description": "The definitive guide to camera placement and its emotional effect."
+  },
+  "angle_definitions": [
+    {
+      "id": "ANG-01",
+      "name": "Eye Level",
+      "impact": "Honesty, trust, and direct human connection.",
+      "tech": "Camera at subject center-mass."
+    },
+    {
+      "id": "ANG-02",
+      "name": "Low Angle (Hero)",
+      "impact": "Dominance, power, and monumental scale.",
+      "tech": "Low position, 20-30 degree upward tilt."
+    },
+    {
+      "id": "ANG-03",
+      "name": "High Angle",
+      "impact": "Technical overview, vulnerability, and clarity.",
+      "tech": "Elevated position, 45 degree downward tilt."
+    },
+    {
+      "id": "ANG-04",
+      "name": "Bird's Eye (90 deg)",
+      "impact": "God-like perspective, structural organization.",
+      "tech": "Top-down perpendicular view."
+    },
+    {
+      "id": "ANG-05",
+      "name": "Worm's Eye (Extreme Low)",
+      "impact": "Overwhelming scale, surreal power.",
+      "tech": "Ground level looking straight up."
+    },
+    {
+      "id": "ANG-06",
+      "name": "Dutch Angle (Canted)",
+      "impact": "Tension, dynamism, and edgy movement.",
+      "tech": "5-15 degree roll on the Z-axis."
+    },
+    {
+      "id": "ANG-07",
+      "name": "POV (Immersive)",
+      "impact": "First-person experience, highly engaging.",
+      "tech": "Lens at human eye height and perspective."
+    }
+  ]
+}

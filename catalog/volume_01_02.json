@@ -1,0 +1,45 @@
+{
+  "volume_info": {
+    "id": "VOL-01-02",
+    "title": "Lighting Physics & Luminance Logic",
+    "description": "Scientific protocols for photon interaction and shadow geometry."
+  },
+  "lighting_physics": {
+    "inverse_square_law": {
+      "formula": "E = I / d^2",
+      "instruction": "Calculate light fall-off based on distance. Prevent 'blown-out' highlights on metallic surfaces."
+    },
+    "color_temperature_k": {
+      "daylight": "5600K (Neutral White)",
+      "tungsten": "3200K (Warm/Orange)",
+      "golden_hour": "3500K-4500K",
+      "industrial_cool": "6500K-7500K (Blue/Clinical)"
+    }
+  },
+  "lighting_styles": [
+    {
+      "id": "LGT-01",
+      "name": "High-Key / Commercial",
+      "ratio": "1:1 or 1:2",
+      "description": "Bright, soft shadows, minimal contrast. Best for hygiene products and clean chemicals.",
+      "setup": "Large softboxes, 45-degree key light, wrap-around fill."
+    },
+    {
+      "id": "LGT-02",
+      "name": "Low-Key / Dramatic",
+      "ratio": "1:8 or higher",
+      "description": "Deep shadows, high contrast. Best for machinery, automotive, and premium 'Hero' shots.",
+      "setup": "Single hard light source, rim lighting, negative fill."
+    },
+    {
+      "id": "LGT-03",
+      "name": "Three-Point Classic",
+      "description": "Key, Fill, and Backlight. Ensures 3D volume and separation.",
+      "setup": "Key at 45 deg, Fill at 0 deg (half power), Rim at 170 deg."
+    }
+  ],
+  "shadow_geometry": {
+    "shadow_hardness": "Controlled by light source size relative to subject (Penumbra width).",
+    "contact_shadows": "Ambient Occlusion (AO) protocol. Must ensure dark contact points where objects touch surfaces."
+  }
+}

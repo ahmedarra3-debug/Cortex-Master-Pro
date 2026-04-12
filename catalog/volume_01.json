@@ -1,0 +1,53 @@
+{
+  "volume_info": {
+    "id": "VOL-01-ULTIMATE",
+    "title": "Universal Optics & Computational Physics",
+    "description": "The definitive guide for high-end optical simulation."
+  },
+  "physics_engine_constants": {
+    "refractive_index_air": 1.00027,
+    "speed_of_light_m_s": 299792458,
+    "fov_formula": "2 * arctan(h / (2 * f))"
+  },
+  "optical_rules": [
+    {
+      "id": "OPT-01",
+      "category": "Ultra-Wide / Industrial Epic",
+      "focal_length": "12mm-20mm",
+      "scientific_data": {
+        "distortion_model": "Brown-Conrady Radial",
+        "perspective_matrix": "Exaggerated Z-axis depth",
+        "keystone_correction": "Required for vertical alignment"
+      },
+      "constraints": {
+        "distortion": "Controlled Barrel (Max 5%)",
+        "subject_placement": "Center-weighted (Inner 30%)"
+      }
+    },
+    {
+      "id": "OPT-03",
+      "category": "Tele-Macro / Premium Product",
+      "focal_length": "85mm-105mm",
+      "scientific_data": {
+        "compression_factor": "High (flattened spatial planes)",
+        "t_stop_target": "T1.5 - T2.0 (Cinema Standard)",
+        "diffraction_limit": "Maintain < f/11 for peak MTF sharpness"
+      },
+      "constraints": {
+        "distortion": "Zero (Rectilinear)",
+        "subject_placement": "Golden Ratio Alignment",
+        "bokeh_geometry": "Anamorphic Oval Squeeze"
+      }
+    }
+  ],
+  "optical_refinements": {
+    "chromatic_aberration": {
+      "status": "Strict Zero Tolerance",
+      "logic": "Suppress axial/lateral fringing on high-contrast metal edges"
+    },
+    "vignetting": {
+      "status": "Natural Fall-off",
+      "logic": "15% luminance reduction at corner coordinates (x0, y0)"
+    }
+  }
+}

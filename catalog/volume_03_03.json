@@ -1,0 +1,44 @@
+{
+  "volume_info": {
+    "id": "VOL-03-03-ULTRA",
+    "title": "Camera Motion & Temporal Logic",
+    "description": "Motion paths and speed protocols for cinematic video production."
+  },
+  "frame_rates": {
+    "24fps": "Film look",
+    "60fps": "TV/Commercial smooth",
+    "120fps": "Slow-mo hero liquid"
+  },
+  "camera_movements": [
+    {
+      "id": "MOT-01",
+      "name": "Static",
+      "vibe": "Focus and stability."
+    },
+    {
+      "id": "MOT-02",
+      "name": "Pan & Tilt",
+      "vibe": "Scanning and revealing the scene."
+    },
+    {
+      "id": "MOT-03",
+      "name": "Dolly In/Out",
+      "vibe": "Emotional connection and physical reveal."
+    },
+    {
+      "id": "MOT-04",
+      "name": "Circular Orbit",
+      "vibe": "Full 3D showcase of metallic surfaces."
+    },
+    {
+      "id": "MOT-05",
+      "name": "Macro Slider",
+      "vibe": "Highlighting micro-textures and fluid drops."
+    },
+    {
+      "id": "MOT-06",
+      "name": "Rack Focus",
+      "vibe": "Shifting attention from background to product."
+    }
+  ]
+}
