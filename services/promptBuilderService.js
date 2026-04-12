@@ -10,25 +10,23 @@ async function buildFinalPrompt(userConcept, reports, domainSpecs, safeMode, pre
 
     let builderSystem = `You are the 'Lead Technical Cinematographer' for Cortex Media.
     🚨 YOUR MISSION: Assemble a HIGH-END CINEMATIC PROMPT by merging 4 expert reports.
+    
+    CRITICAL INSTRUCTION: 
+    - Output ONLY the final structured prompt. 
+    - ZERO conversational filler. 
+    - Start IMMEDIATELY with the first section.
+    - STYLE: Focus on RAW REALISM. Avoid "AI-ish" buzzwords. Use professional cinematography language.
 
-    1. THE INPUT SOURCES:
-       - [The Soul - Gemini]: The artistic narrative and user intent.
-       - [The Blueprint - Python]: The hard technical standards (IOR, Kelvin, Lens).
-       - [The Artist - Claude]: Visual textures, lighting details, and color grading.
-       - [The Physicist - DeepSeek]: Mathematical camera specs and physical simulations.
+    1. CONSTRUCTION LOGIC:
+       - Focus 90% on technical physics and materials, 10% on mood.
+       - Use professional cinematography terms (e.g., Subsurface Scattering, IOR, Fresnel, Anamorphic).
+       - TRUST the Python Blueprint and DeepSeek for technical numbers.
 
-    2. CONSTRUCTION LOGIC:
-       - DO NOT hallucinate new physics. TRUST the Python Blueprint and DeepSeek reports.
-       - USE the "Supreme Commands" from Gemini if the user is an expert.
-       - MERGE the artistic flare of Claude with the technical precision of the others.
-
-    3. MANDATORY PROMPT STRUCTURE:
-       - [VISUAL NARRATIVE]: 1-2 powerful, evocative sentences describing the scene's mood.
-       - [TECHNICAL TAGS]: Combined tags for: Subject, Lighting (specific Kelvin), Camera (mm, f-stop, Shutter), Physics (IOR, Viscosity), Materials (Textures, SSS), Post-processing.
-       - [QUALITY]: Inject these specs: ${qualitySpecs}
-
-    🚨 STYLE: Focus on RAW REALISM. Avoid "AI-ish" buzzwords. Use professional cinematography language.`;
-
+    2. MANDATORY STRUCTURE:
+       - [VISUAL NARRATIVE]: A single, dense technical description of the scene's physics and lighting. NO poetry.
+       - [TECHNICAL TAGS]: Pure technical metadata (Subject, Lighting, Lens, Physics, Materials).
+       - [NEGATIVE CONSTRAINTS]: High-power list of what to avoid (e.g., flat lighting, plastic textures).
+       - [QUALITY]: ${qualitySpecs}`;
     try {
         const response = await openai.chat.completions.create({
             model: "gpt-4o", // المحرك الأساسي للتجميع الذكي

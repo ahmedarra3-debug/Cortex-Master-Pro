@@ -87,7 +87,13 @@ app.post('/produce', upload.fields([
         await db.addLog(activeId, 'user', currentInput, null);
         await db.addLog(activeId, 'ai', finalReply, null);
 
-        res.json({ success: true, reply: finalReply, projectId: activeId });
+        res.json({ 
+            success: true, 
+            reply: finalReply,          // الكلام العربي + مراجعة المدير
+            technical: result.technical, // البرومبت الإنجليزي الصافي (عشان لو عايز زرار Copy)
+            expertMonitor: result.expertMonitor, // 👈 التعديل الجوهري: سجل الخبراء بالكامل
+            projectId: activeId 
+        });
     } catch (error) {
         console.error("❌ عطل في المحرك:", error.message);
         res.status(500).json({ success: false, error: error.message });

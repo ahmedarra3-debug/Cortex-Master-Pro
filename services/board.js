@@ -86,7 +86,15 @@ async function processProduction(params) {
             vision: arabicVisionForUser, // التعديل الرابع: إرجاع الجزء العربي الصافي فقط للعميل
             technical: technicalPrompt,
             finalReview: auditOutput,
-            detailedReports: reports 
+            detailedReports: reports,
+            expertMonitor: {
+                gemini_eye: englishPayloadForBots,
+                python_architect: pythonBlueprint,
+                claude_artist: visualReport,
+                deepseek_scientist: physicsReport,
+                builder_draft: technicalPrompt,
+                manager_audit: auditOutput
+            } 
         };
 
     } catch (error) {
