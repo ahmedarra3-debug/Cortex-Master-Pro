@@ -3,18 +3,21 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 /**
  * 👑 [GENERAL MANAGER v3.0.0] - The Ultimate Technical Authority
- * المهمة: المراجعة النهائية، حماية الفيزياء، وتصفية البرومبت من أي "حشو" أدبي.
  */
 async function getCortexAudit(userConcept, reports, masterPrompt, modelProfiles) {
     console.log("👑 [MANAGER]: المدير العام (GPT-5.4) يبدأ المراجعة الفنية الصارمة...");
 
-    // 🎯 توحيد التعليمات في "دستور" واحد للمدير
+    // 🎯 دمج كل التعليمات بما فيها قاعدة الـ 2200 حرف داخل المتغير
     const unifiedSystemPrompt = `You are the "Chief Executive Director & Master Cinematographer" of Cortex Media.
     🚨 YOUR MANDATE: 
     - Review the Builder's prompt and ensure 90% focus on physics/materials and 10% on mood.
-    - STRIP AWAY all conversational fillers (No "Sure", "Here is your prompt", or "I hope you like it").
+    - STRIP AWAY all conversational fillers (No "Sure", "Here is your prompt", etc).
     - USE camera-department terminology exclusively.
-    - ENSURE every "Supreme Command" from expert users is present.
+    
+    🚨 HARD CHARACTER CAP: The [FINAL MASTER PROMPT] section MUST NOT exceed 2200 characters. 
+    If the prompt is too long, PRUNE the least critical descriptive adjectives first, but PROTECT the technical numbers (IOR, Kelvin, f-stop, focal length).
+    Your Arabic [ZATOUNA] should remain brief (max 2 lines) to save space.
+
     🚨 BACKGROUND AUTHORITY: 
     - If Python returns "NARRATIVE_DRIVEN_BACKGROUND" or a Fallback alert, you MUST ignore the white studio background. 
     - In this case, fully adopt Claude's environmental and storytelling description for the background.
@@ -33,7 +36,7 @@ async function getCortexAudit(userConcept, reports, masterPrompt, modelProfiles)
 
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-5.4", // الموديل الإمبراطوري
+            model: "gpt-4o", // أو الموديل المتوفر لديك
             messages: [
                 { role: "system", content: unifiedSystemPrompt },
                 { 
@@ -47,12 +50,12 @@ async function getCortexAudit(userConcept, reports, masterPrompt, modelProfiles)
                     ` 
                 }
             ],
-            temperature: 0.1 // تقليل الحرارة لأقصى درجة لضمان عدم "الهبد" أو الرغي
+            temperature: 0.1 
         });
 
         return response.choices[0].message.content;
     } catch (error) {
-        console.error("❌ [MANAGER ERROR]: عطل في مكتب المدير العام (GPT-5.4):", error.message);
+        console.error("❌ [MANAGER ERROR]: عطل في مكتب المدير العام:", error.message);
         throw error;
     }
 }

@@ -1,4 +1,8 @@
 {
+  "name": "cortex-media",
+  "version": "4.0.1",
+  "description": "The Industrial Creative Engine for Cortex Media",
+  "main": "server.js",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
     "@google/generative-ai": "^0.24.1",

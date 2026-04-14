@@ -28,7 +28,8 @@ async function getDeepSeekPhysics(englishPayload, pythonBlueprint, domainSpecs) 
 
                     🚨 [OUTPUT FORMAT]:
                     Provide the data in clear technical English tags only. No prose, no conversational text.
-                    Example: [FOV: 24 | Shutter: 1/100 | IOR: 1.48 | Viscosity: High]` 
+                    Example: [FOV: 24 | Shutter: 1/100 | IOR: 1.48 | Viscosity: High]`
+                     
                 },
                 { 
                     role: "user", 

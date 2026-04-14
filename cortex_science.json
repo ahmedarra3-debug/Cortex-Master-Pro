@@ -7,6 +7,10 @@
       "strategy": "Pure_Generation",
       "description": "توليد فيديو من نص فقط بناءً على خيال المكنة ومعطيات المجال"
     },
+    "global_quality": {
+    "specs": "Cinematic 8K, Highly Detailed Physics, Neural Rendering, 180-degree Motion Blur, ACES Color Space",
+    "post_processing": "Motion Blur, Depth of Field, Film Grain, Color Grading"
+  },
     "MODE_I2V_START": {
       "slots": 1,
       "strategy": "Animation_Propulsion",

@@ -59,7 +59,10 @@ app.post('/produce', upload.fields([
         if (!domainSpecs) domainSpecs = { label: "General Creative", science: "Standard Physics" };
 
         // 🚨 سطر الجودة (مرة واحدة وبس يا ريس)
-        const qualitySpecs = safeMode === 'VIDEO' ? videoScience.global_quality.specs : imageScience.global_quality.specs;
+        // استخدام Optional Chaining (?.) وقيمة افتراضية (Fallback) عشان المكنة متكراشش
+        const qualitySpecs = (safeMode === 'VIDEO') 
+            ? (videoScience.global_quality?.specs || "High-Quality Video Render") 
+            : (imageScience.global_quality?.specs || "High-Quality Photo Render");
 
         // 🚀 ج. إرسال المهمة لـ "غرفة العمليات" (Board)
         const result = await board.processProduction({
@@ -73,7 +76,15 @@ app.post('/produce', upload.fields([
             uiSelections: uiSelections, // 👈 السلك الجديد وصل هنا
             modelProfiles: safeMode === 'VIDEO' ? videoScience.model_profiles : imageScience.model_profiles
         });
-
+        // ==========================================
+        // 👇اضافة سطر لعدد حروف البرومبت👇
+        // ==========================================
+        console.log("--------------------------------------------------");
+        console.log("📏 [STATS]: طول البرومبت النهائي:", result.technical.length, "حرف.");
+        if (result.technical.length > 2200) {
+            console.warn("⚠️ [WARNING]: البرومبت تخطى الحد المسموح (2200)!");
+        }
+        console.log("--------------------------------------------------");
         // 💾 د. الأرشفة والرد النهائي
         const finalReply = result.vision + "\n\n" + result.finalReview;
         
