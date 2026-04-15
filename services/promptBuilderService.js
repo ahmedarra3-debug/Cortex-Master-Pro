@@ -1,41 +1,33 @@
-const OpenAI = require("openai");
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const fs = require("fs");
+const path = require("path");
+const { openai } = require("./llm/openaiClient");
+const { sanitizeLogPayload } = require("./utils/logSanitizer");
+const { parseDtoResponse } = require("./utils/dtoHandler");
+
+const builderSystemTemplate = fs.readFileSync(
+    path.join(__dirname, "../prompts/promptBuilder.system.txt"),
+    "utf8"
+);
+
+const BUILDER_DTO_DEFAULTS = Object.freeze({
+    technicalPrompt: "",
+    negativePrompt: "",
+    modelSelection: "gpt-4o"
+});
 
 /**
  * 🏗️ [PROMPT BUILDER v3.0] - The Master Assembler (GPT-4)
  */
-async function buildFinalPrompt(userConcept, reports, domainSpecs, safeMode, previousPrompt, qualitySpecs) {
+async function buildFinalPrompt(userConcept, reports, domainSpecs, qualitySpecs) {
     console.log("🏗️ [BUILDER]: جاري دمج التقارير وصياغة الكادر النهائي...");
 
-    // 💡 التعديل هنا: السطر الصارم بقى جزء من "نفس النص" جوه الـ Backticks
-    let builderSystem = `You are the 'Lead Technical Cinematographer' for Cortex Media.
-    🚨 YOUR MISSION: Assemble a HIGH-END CINEMATIC PROMPT by merging 4 expert reports.
-    
-    CRITICAL INSTRUCTION: 
-    - Output ONLY the final structured prompt. 
-    - ZERO conversational filler. 
-    - Start IMMEDIATELY with the first section.
-    - STYLE: Focus on RAW REALISM. Avoid "AI-ish" buzzwords. Use professional cinematography language.
-
-    1. CONSTRUCTION LOGIC:
-       - Focus 90% on technical physics and materials, 10% on mood.
-       - Use professional cinematography terms (e.g., Subsurface Scattering, IOR, Fresnel, Anamorphic).
-       - TRUST the Python Blueprint and DeepSeek for technical numbers.
-
-    2. MANDATORY STRUCTURE:
-       - [VISUAL NARRATIVE]: A single, dense technical description of the scene's physics and lighting. NO poetry.
-       - [TECHNICAL TAGS]: Pure technical metadata (Subject, Lighting, Lens, Physics, Materials).
-       - [NEGATIVE CONSTRAINTS]: High-power list of what to avoid (e.g., flat lighting, plastic textures).
-       - [QUALITY]: ${qualitySpecs}
-
-    🚨 STRICT LENGTH LIMIT: Your total output must be UNDER 1800 characters to leave room for the Manager's final polish. 
-    Focus on technical density. Use comma-separated technical tokens instead of long sentences where possible.`;
+    const builderSystemPrompt = builderSystemTemplate.replace("{{QUALITY_SPECS}}", qualitySpecs);
 
     try {
         const response = await openai.chat.completions.create({
             model: "gpt-4o", 
             messages: [
-                { role: "system", content: builderSystem },
+                { role: "system", content: builderSystemPrompt },
                 { 
                     role: "user", 
                     content: `
@@ -54,9 +46,12 @@ async function buildFinalPrompt(userConcept, reports, domainSpecs, safeMode, pre
             temperature: 0.4 
         });
 
-        return response.choices[0].message.content;
+        return parseDtoResponse(response.choices[0].message.content || "", BUILDER_DTO_DEFAULTS, {
+            logger: console,
+            warningTag: "BUILDER DTO"
+        });
     } catch (error) {
-        console.error("❌ [PROMPT BUILDER ERROR]:", error.message);
+        console.error("❌ [PROMPT BUILDER ERROR]:", sanitizeLogPayload(error.message || "Unknown builder error"));
         throw error;
     }
 }

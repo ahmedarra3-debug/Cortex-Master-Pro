@@ -1,37 +1,67 @@
-import sys
 import io
 import json
-import os
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+import sys
+from pathlib import Path
+from typing import Any, Dict, Optional
 
-def load_catalog(path):
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+
+BASE_DIR = Path(__file__).resolve().parent
+CATALOG_FILES = {
+    "opt": "catalog/volume_01.json",
+    "lgt": "catalog/volume_01_02.json",
+    "clr": "catalog/volume_01_03.json",
+    "met": "catalog/volume_02_01.json",
+    "liq": "catalog/volume_02_02.json",
+    "sft": "catalog/volume_02_03.json",
+    "cmp": "catalog/volume_03_01.json",
+    "ang": "catalog/volume_03_02.json",
+    "mot": "catalog/volume_03_03.json",
+    "stu": "catalog/volume_04_01.json",
+    "ext": "catalog/volume_04_02.json",
+    "ind": "catalog/volume_04_03.json",
+    "d1": "catalog/volume_05_01.json",
+    "d2": "catalog/volume_05_02.json",
+    "d3": "catalog/volume_05_03.json",
+}
+
+
+def load_catalog(path: Path) -> Optional[Dict[str, Any]]:
     try:
-        with open(path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception as e:
-        return None
+        with path.open("r", encoding="utf-8") as file:
+            return json.load(file)
+    except (FileNotFoundError, PermissionError, OSError) as error:
+        print(f"[ARCHITECT WARNING] Catalog read failed: {path} ({error})", file=sys.stderr)
+    except json.JSONDecodeError as error:
+        print(f"[ARCHITECT WARNING] Invalid catalog JSON: {path} ({error})", file=sys.stderr)
+    return None
 
-def architect_engine(vision, opt_id, lgt_id, clr_id, mat_id, comp_id, ang_id, env_id, domain_id, 
-                     mot_id=None, mat_type="metal", env_type="studio"):
-    
-    # 1. تحميل كافة المجلدات الـ 15
-    cats = {
-        "opt": load_catalog('catalog/volume_01.json'),
-        "lgt": load_catalog('catalog/volume_01_02.json'),
-        "clr": load_catalog('catalog/volume_01_03.json'),
-        "met": load_catalog('catalog/volume_02_01.json'),
-        "liq": load_catalog('catalog/volume_02_02.json'),
-        "sft": load_catalog('catalog/volume_02_03.json'),
-        "cmp": load_catalog('catalog/volume_03_01.json'),
-        "ang": load_catalog('catalog/volume_03_02.json'),
-        "mot": load_catalog('catalog/volume_03_03.json'),
-        "stu": load_catalog('catalog/volume_04_01.json'),
-        "ext": load_catalog('catalog/volume_04_02.json'),
-        "ind": load_catalog('catalog/volume_04_03.json'),
-        "d1": load_catalog('catalog/volume_05_01.json'),
-        "d2": load_catalog('catalog/volume_05_02.json'),
-        "d3": load_catalog('catalog/volume_05_03.json')
+
+def load_all_catalogs() -> Dict[str, Optional[Dict[str, Any]]]:
+    return {
+        catalog_key: load_catalog(BASE_DIR / relative_path)
+        for catalog_key, relative_path in CATALOG_FILES.items()
     }
+
+
+# Cache at process startup so requests avoid repeated disk reads.
+CACHED_CATALOGS = load_all_catalogs()
+
+def architect_engine(
+    vision,
+    opt_id,
+    lgt_id,
+    clr_id,
+    mat_id,
+    comp_id,
+    ang_id,
+    env_id,
+    domain_id,
+    mot_id=None,
+    mat_type="metal",
+    env_type="studio",
+):
+    cats = CACHED_CATALOGS
 
     # 2. البحث الذكي عن التخصص
     s_dom = None
@@ -119,32 +149,33 @@ FINAL INSTRUCTION: Synthesize with surgical precision for professional productio
 """
 
 if __name__ == "__main__":
+    if len(sys.argv) <= 1:
+        print("Error: No data received")
+        sys.exit(1)
+
+    raw_data = sys.argv[1]
     try:
-        if len(sys.argv) > 1:
-            raw_data = sys.argv[1] 
-            data = json.loads(raw_data) 
-            
-            selections = data.get('selections', {})
-            domain = data.get('domain', {})
-            
-            result = architect_engine(
-                vision=data.get('concept', 'Cinematic Shot'),
-                domain_id=domain.get('id', 'General'), 
-                opt_id=selections.get('opt_id', 'OPT-01'), 
-                lgt_id=selections.get('lgt_id', 'LGT-01'),
-                clr_id=selections.get('clr_id', 'CLR-01'),
-                mat_id=selections.get('mat_id', 'MET-01'),
-                comp_id=selections.get('comp_id', 'COMP-01'),
-                ang_id=selections.get('ang_id', 'ANG-01'),
-                env_id=selections.get('env_id', 'STU-01'),
-                mot_id=selections.get('mot_id', 'MOT-01'),
-                mat_type=selections.get('mat_type', 'metal'),
-                env_type=selections.get('env_type', 'studio')
-            )
-            
-            print(result)
-        else:
-            print("Error: No data received")
-            
-    except Exception as e:
-        print(f"Python Error: {str(e)}")
+        data = json.loads(raw_data)
+    except json.JSONDecodeError as error:
+        print(f"Python Error: Invalid input JSON ({error})")
+        sys.exit(1)
+
+    selections = data.get("selections", {})
+    domain = data.get("domain", {})
+
+    result = architect_engine(
+        vision=data.get("concept", "Cinematic Shot"),
+        domain_id=domain.get("id", "General"),
+        opt_id=selections.get("opt_id", "OPT-01"),
+        lgt_id=selections.get("lgt_id", "LGT-01"),
+        clr_id=selections.get("clr_id", "CLR-01"),
+        mat_id=selections.get("mat_id", "MET-01"),
+        comp_id=selections.get("comp_id", "COMP-01"),
+        ang_id=selections.get("ang_id", "ANG-01"),
+        env_id=selections.get("env_id", "STU-01"),
+        mot_id=selections.get("mot_id", "MOT-01"),
+        mat_type=selections.get("mat_type", "metal"),
+        env_type=selections.get("env_type", "studio"),
+    )
+
+    print(result)

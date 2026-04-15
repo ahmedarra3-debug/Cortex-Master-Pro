@@ -7,6 +7,7 @@ const fs = require('fs');
 require('dotenv').config(); 
 const db = require('./database');
 const board = require('./services/board');
+const { buildProductionSpecs } = require('./services/logic/specsService');
 const app = express(); 
 
 // 📂 إعداد نظام التخزين (Multer)
@@ -31,15 +32,17 @@ app.post('/produce', upload.fields([
 ]), async (req, res) => {
     
     const data = req.body; 
-    // 💡 التعديل: استقبال الاختيارات لو مبعوتة، أو فرض كائن فارغ عشان المكنة متقفش
-    const uiSelections = data.uiSelections ? JSON.parse(data.uiSelections) : {}; 
-    const isUpdate = (data.isUpdate === "true"); 
-    const mode = data.mode; 
     let activeId = data.projectId; 
-    let selectedDomain = data.domain; 
-    const currentInput = isUpdate ? data.userUpdate : data.concept; 
-    // 📡 [الرادار المتأمن]: بيطبع الحالة ومنع الكراش لو المود مش مبعوث
-    const safeMode = (mode || 'photo').toUpperCase(); 
+    const {
+        uiSelections,
+        safeMode,
+        selectedDomain,
+        currentInput,
+        domainSpecs,
+        qualitySpecs,
+        modelProfiles
+    } = buildProductionSpecs(data, imageScience, videoScience);
+
     console.log("--------------------------------------------------");
     console.log(`🎬 [REQUEST]: استلام طلب إنتاج جديد...`);
     console.log(`🎯 [MODE]: ${safeMode}`); 
@@ -47,22 +50,7 @@ app.post('/produce', upload.fields([
     console.log("--------------------------------------------------");
 
     try {
-        const { history, previousPrompt } = await getProjectContext(activeId);
-        // 📚 ب. تجهيز العلم (الـ JSONs)
-        const science = safeMode === 'VIDEO' ? videoScience : imageScience;
-        const domains = safeMode === 'VIDEO' ? videoScience.visual_domains : imageScience.domains;
-
-        // لو المجال 'auto' أو مش لاقيه، خد أول مجال في القائمة كـ Default أو مجال عام
-        let domainSpecs = domains[data.domain] || domains['General'] || Object.values(domains)[0];
-
-        // تأكد إن فيه Label دايماً عشان الـ Console.log ميزعلش
-        if (!domainSpecs) domainSpecs = { label: "General Creative", science: "Standard Physics" };
-
-        // 🚨 سطر الجودة (مرة واحدة وبس يا ريس)
-        // استخدام Optional Chaining (?.) وقيمة افتراضية (Fallback) عشان المكنة متكراشش
-        const qualitySpecs = (safeMode === 'VIDEO') 
-            ? (videoScience.global_quality?.specs || "High-Quality Video Render") 
-            : (imageScience.global_quality?.specs || "High-Quality Photo Render");
+        const { history } = await getProjectContext(activeId);
 
         // 🚀 ج. إرسال المهمة لـ "غرفة العمليات" (Board)
         const result = await board.processProduction({
@@ -71,10 +59,9 @@ app.post('/produce', upload.fields([
             files: extractFiles(req.files, data.mode), 
             safeMode: safeMode,
             domainSpecs: domainSpecs,
-            previousPrompt: previousPrompt,
             qualitySpecs: qualitySpecs,
             uiSelections: uiSelections, // 👈 السلك الجديد وصل هنا
-            modelProfiles: safeMode === 'VIDEO' ? videoScience.model_profiles : imageScience.model_profiles
+            modelProfiles: modelProfiles
         });
         // ==========================================
         // 👇اضافة سطر لعدد حروف البرومبت👇
@@ -167,7 +154,7 @@ app.listen(3000, () => {
 
 // 1. دالة استعادة سياق المشروع (الذاكرة)
 async function getProjectContext(projectId) {
-    if (!projectId) return { history: [], previousPrompt: "" };
+    if (!projectId) return { history: [] };
     
     const logs = await db.getProjectHistory(projectId);
     
@@ -177,16 +164,7 @@ async function getProjectContext(projectId) {
         parts: [{ text: log.content }]
     }));
 
-    // استخراج آخر برومبت تقني (نفس منطقك القديم بالظبط)
-    let prevPrompt = "";
-    const lastAi = [...logs].reverse().find(l => l.role === 'ai');
-    if (lastAi) {
-       // الرادار الجديد بيبحث عن Master Prompt وبيهرب من العلامات التانية (📊 أو 🚫)
-        const match = lastAi.content.match(/\[TECHNICAL TAGS\]:?\s*([\s\S]*?)(?=\n\n|📊|🚫|$|🎬)/);
-        if (match) prevPrompt = match[1];
-    }
-    
-    return { history, previousPrompt: prevPrompt };
+    return { history };
 }
 
 // 2. دالة تنقية الملفات (بناءً على المود)

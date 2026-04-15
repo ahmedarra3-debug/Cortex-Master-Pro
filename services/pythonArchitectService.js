@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const path = require('path');
+const { sanitizeLogPayload } = require('./utils/logSanitizer');
 
 /**
  * 🐍 [PYTHON ARCHITECT BRIDGE v3.1]
@@ -7,11 +8,10 @@ const path = require('path');
  */
 async function getPythonBlueprint(uiSelections, domainSpecs) {
     return new Promise((resolve, reject) => {
-        console.log("🐍 [BRIDGE]: جاري فتح قناة اتصال مباشرة مع محرك البايثون (3.13)...");
+        console.log("🐍 [BRIDGE]: جاري فتح قناة اتصال مباشرة مع محرك البايثون...");
 
-        // 1. تحديد المسار المطلق لمحرك البايثون (المسار اللي إنت بعته يا مخرج)
-        // ملحوظة: استخدمنا الـ Double Backslash (\\) عشان الويندوز يفهم العنوان صح
-        const pythonExecutable = "C:\\Users\\Ahmed\\AppData\\Local\\Programs\\Python\\Python313\\python.exe";
+        // 1. مسار محرك البايثون من بيئة التشغيل (قابل للنقل بين الأجهزة)
+        const pythonExecutable = process.env.PYTHON_PATH || 'python';
 
         // 2. تحديد مسار ملف السكريبت (architect.py)
         const pythonScriptPath = path.join(__dirname, '../architect.py');
@@ -24,9 +24,30 @@ async function getPythonBlueprint(uiSelections, domainSpecs) {
 
         // 4. إطلاق المحرك بالمسار المباشر (The Direct Launch)
         const pythonProcess = spawn(pythonExecutable, [pythonScriptPath, inputData]);
+        const timeoutMs = Number(process.env.PYTHON_BRIDGE_TIMEOUT_MS || 30000);
 
         let blueprintData = '';
         let errorData = '';
+        let settled = false;
+
+        const settleReject = (message) => {
+            if (settled) return;
+            settled = true;
+            reject(new Error(message));
+        };
+
+        const settleResolve = (value) => {
+            if (settled) return;
+            settled = true;
+            resolve(value);
+        };
+
+        const bridgeTimeout = setTimeout(() => {
+            try {
+                pythonProcess.kill();
+            } catch (_) {}
+            settleReject(`انتهت مهلة جسر البايثون بعد ${timeoutMs}ms.`);
+        }, timeoutMs);
 
         // استلام الـ Blueprint من بايثون
         pythonProcess.stdout.on('data', (data) => {
@@ -38,18 +59,27 @@ async function getPythonBlueprint(uiSelections, domainSpecs) {
             errorData += data.toString();
         });
 
+        // أخطاء التشغيل (ملف غير موجود، صلاحيات، مسار غير صحيح...)
+        pythonProcess.on('error', (error) => {
+            clearTimeout(bridgeTimeout);
+            console.error("❌ [PYTHON BRIDGE ERROR]:", sanitizeLogPayload(error.message || "Unknown bridge error"));
+            settleReject(`تعذر تشغيل محرك البايثون. تحقق من PYTHON_PATH. (${error.message})`);
+        });
+
         // عند انتهاء عملية المعالجة
         pythonProcess.on('close', (code) => {
+            clearTimeout(bridgeTimeout);
             if (code !== 0) {
-                console.error(`❌ [PYTHON ERROR]: فشل المحرك بكود ${code}: ${errorData}`);
-                return reject(new Error("فشل محرك البايثون في استخراج القواعد الهندسية."));
+                const safeErrorData = sanitizeLogPayload(errorData || "Unknown python process error");
+                console.error(`❌ [PYTHON ERROR]: فشل المحرك بكود ${code}: ${safeErrorData}`);
+                return settleReject("فشل محرك البايثون في استخراج القواعد الهندسية.");
             }
 
             try {
                 // إرجاع النتيجة النهائية للـ Board
-                resolve(blueprintData.trim());
+                settleResolve(blueprintData.trim());
             } catch (e) {
-                reject(new Error("خطأ في قراءة بيانات البايثون المرتجعة."));
+                settleReject("خطأ في قراءة بيانات البايثون المرتجعة.");
             }
         });
     });

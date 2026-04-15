@@ -1,4 +1,18 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const { sanitizeLogPayload } = require('./utils/logSanitizer');
+const { parseDtoResponse } = require('./utils/dtoHandler');
+
+const deepseekSystemTemplate = fs.readFileSync(
+    path.join(__dirname, '../prompts/deepseek.system.txt'),
+    'utf8'
+);
+const DEEPSEEK_DTO_DEFAULTS = Object.freeze({
+    technicalPrompt: "Physically grounded camera and render settings for stable cinematic output.",
+    negativePrompt: "incorrect IOR, impossible shutter-speed blur, unstable noise, plastic-like liquid behavior",
+    modelSelection: "deepseek-reasoner"
+});
 
 /**
  * 🧪 [DEEPSEEK PHYSICS v3.1] - The Scientific Core (Optimized)
@@ -14,21 +28,7 @@ async function getDeepSeekPhysics(englishPayload, pythonBlueprint, domainSpecs) 
             messages: [
                 { 
                     role: "system", 
-                    content: `You are the "Senior Cinematic Physics Engineer" at Cortex Media.
-                    Your mission: Generate precise physical and camera parameters for high-end render engines (Unreal Engine 5.4, Octane, V-Ray).
-
-                    🚨 [OPERATIONAL PROTOCOL]:
-                    1. INPUT DATA: You will receive a "Gemini Payload" (User intent/expertise) and a "Python Blueprint" (Standard domain rules).
-                    2. THE GOLDEN RULE (Steptronic): If the User is an "Expert" and provided "Supreme Commands" (e.g., specific FOV, Shutter Speed, or IOR), these commands OVERRIDE the Python Blueprint.
-                    3. DATA FILLING: Use the Python Blueprint for any parameters not specified by the user.
-                    4. PRECISION: Provide exact numerical values for: 
-                       - Camera: FOV, Focal Length, Aperture (f-stop), Shutter Speed.
-                       - Physics: IOR (Index of Refraction), Viscosity (for liquids), Gravity scale, Surface Tension.
-                       - Rendering: Samples, Ray-depth, Denoiser settings.
-
-                    🚨 [OUTPUT FORMAT]:
-                    Provide the data in clear technical English tags only. No prose, no conversational text.
-                    Example: [FOV: 24 | Shutter: 1/100 | IOR: 1.48 | Viscosity: High]`
+                    content: deepseekSystemTemplate
                      
                 },
                 { 
@@ -53,12 +53,16 @@ async function getDeepSeekPhysics(englishPayload, pythonBlueprint, domainSpecs) 
             timeout: 120000 
         });
 
-        return response.data.choices[0].message.content;
+        return parseDtoResponse(response.data.choices[0]?.message?.content || "", DEEPSEEK_DTO_DEFAULTS, {
+            logger: console,
+            warningTag: "DEEPSEEK DTO"
+        });
     } catch (error) {
         if (error.code === 'ECONNABORTED') {
             console.error("❌ [DEEPSEEK ERROR]: الموديل استغرق وقتاً طويلاً جداً (Timeout).");
         } else {
-            console.error("❌ [DEEPSEEK ERROR]:", error.response?.data || error.message);
+            const safeErrorPayload = sanitizeLogPayload(error.response?.data || error.message || "Unknown DeepSeek error");
+            console.error("❌ [DEEPSEEK ERROR]:", safeErrorPayload);
         }
         throw error;
     }

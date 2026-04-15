@@ -307,7 +307,7 @@
             const d = await res.json();
             if (d.success) {
                 activeProjectId = d.projectId;
-                appendMsg(d.reply, "ai-msg");
+                appendAiReply(d);
                 // 🚀 عرض كروت الخبراء لو السيرفر بعتها
                 if (d.expertMonitor) {
                     appendExpertMonitor(d.expertMonitor);
@@ -325,11 +325,44 @@
         const win = document.getElementById('chat-window');
         const d = document.createElement('div');
         d.className = `msg ${className}`;
-        let formatted = content.replace("Director's Note:", "<div style='color:var(--gold); font-weight:bold; border-top:1px solid #333; margin-top:10px; padding-top:5px;'>🎬 نصيحة المخرج الاستشارية (GPT-5.4):</div>");
-        formatted = formatted.replace("[TECHNICAL TAGS]", "<div style='color:var(--accent); font-weight:bold; margin-top:10px;'>🛠️ المواصفات التقنية للهندسة الفيزيائية:</div>");
-        d.innerHTML = formatted;
+        d.textContent = content;
         win.appendChild(d);
         win.scrollTo({ top: win.scrollHeight, behavior: 'smooth' });
+    }
+
+    function safeParseJson(text) {
+        try {
+            return JSON.parse(text);
+        } catch (_) {
+            return null;
+        }
+    }
+
+    function appendAiReply(responseData) {
+        const rawReply = responseData.reply || "";
+        const splitIndex = rawReply.indexOf("[FINAL MASTER PROMPT]:");
+        const visionText = splitIndex >= 0 ? rawReply.slice(0, splitIndex).trim() : rawReply.trim();
+        const managerAudit = safeParseJson(responseData?.expertMonitor?.manager_audit || "");
+
+        if (managerAudit && (managerAudit.technicalPrompt || managerAudit.negativePrompt || managerAudit.modelSelection)) {
+            const structuredReply = [
+                visionText,
+                "",
+                "FINAL MASTER PROMPT",
+                managerAudit.technicalPrompt || "",
+                "",
+                "NEGATIVE PROMPT",
+                managerAudit.negativePrompt || "",
+                "",
+                "MODEL SELECTION",
+                managerAudit.modelSelection || ""
+            ].join("\n");
+
+            appendMsg(structuredReply.trim(), "ai-msg");
+            return;
+        }
+
+        appendMsg(rawReply, "ai-msg");
     }
     // --- 🛠️ نظام عرض تقارير الخبراء (Expert Monitor) ---
     function appendExpertMonitor(monitorData) {
@@ -381,7 +414,7 @@
         const res = await fetch('/produce', { method: 'POST', body: fd });
         const d = await res.json();
         if (d.success) {
-            appendMsg(d.reply, "ai-msg");
+            appendAiReply(d);
             if (d.expertMonitor) { // 🚀 السلك الجديد
                 appendExpertMonitor(d.expertMonitor);
             }
