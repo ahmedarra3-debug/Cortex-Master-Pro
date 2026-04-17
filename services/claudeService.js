@@ -1,15 +1,14 @@
 const Anthropic = require('@anthropic-ai/sdk');
-const fs = require('fs');
 const path = require('path');
 const { sanitizeLogPayload } = require('./utils/logSanitizer');
 const { parseDtoResponse } = require('./utils/dtoHandler');
+const { readPromptWithCache } = require('./utils/promptCache');
 
 const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
 });
-const claudeSystemTemplate = fs.readFileSync(
-    path.join(__dirname, '../prompts/claude.system.txt'),
-    'utf8'
+const claudeSystemTemplate = readPromptWithCache(
+    path.join(__dirname, '../prompts/claude.system.txt')
 );
 const CLAUDE_DTO_DEFAULTS = Object.freeze({
     technicalPrompt: "Balanced visual architecture with production-grade composition and lighting.",
@@ -29,7 +28,7 @@ async function getClaudeVisualVision(englishPayload, pythonBlueprint, domainSpec
         const response = await anthropic.messages.create(
             {
                 model: "claude-sonnet-4-6", 
-                max_tokens: 400, 
+                max_tokens: 1500, 
                 system: [
                     {
                         type: "text",
@@ -54,11 +53,13 @@ async function getClaudeVisualVision(englishPayload, pythonBlueprint, domainSpec
             if (read > 0) console.log(`💰 [CORTEX ECONOMY]: Cache Hit! Saved ${read} tokens (1 Cent cost).`);
             else console.log("🆕 [CACHE WRITE]: Building initial technical memory...");
         }
-
-        return parseDtoResponse(response.content[0]?.text || "", CLAUDE_DTO_DEFAULTS, {
+        const rawClaudeText = response.content[0]?.text || "";
+        
+        return parseDtoResponse(rawClaudeText, CLAUDE_DTO_DEFAULTS, {
             logger: console,
             warningTag: "CLAUDE DTO"
         });
+        
     } catch (error) {
         console.error("❌ [CLAUDE VISUAL ERROR]:", sanitizeLogPayload(error.message || "Unknown Claude error"));
         throw error;

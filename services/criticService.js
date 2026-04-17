@@ -1,12 +1,11 @@
-const fs = require("fs");
 const path = require("path");
 const { openai } = require("./llm/openaiClient");
 const { sanitizeLogPayload } = require("./utils/logSanitizer");
 const { parseDtoResponse } = require("./utils/dtoHandler");
+const { readPromptWithCache } = require("./utils/promptCache");
 
-const auditSystemTemplate = fs.readFileSync(
-    path.join(__dirname, "../prompts/critic.system.txt"),
-    "utf8"
+const auditSystemTemplate = readPromptWithCache(
+    path.join(__dirname, "../prompts/critic.system.txt")
 );
 
 const AUDIT_DTO_DEFAULTS = Object.freeze({

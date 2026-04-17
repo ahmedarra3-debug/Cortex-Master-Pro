@@ -20,23 +20,20 @@ async function processProduction(params) {
 
     try {
         // ---------------------------------------------------------
-        // 🛑 المحطة الأولى: مكتب الاستقبال (Gemini)
+        // ⚡ PARALLEL EXECUTION: Gemini Reception & Python Bridge
         // ---------------------------------------------------------
-        console.log("🛎️ [BOARD]: جيمناي يحلل طلب العميل والصور المرفقة...");
-        const geminiReport = await geminiService.getGeminiCreativeSoul(concept, history, files, domainSpecs);
+        console.log("⚡ [BOARD]: تشغيل موازي: جيمناي يحلل الطلب + محرك البايثون يبني الأساس...");
+        const [geminiReport, pythonBlueprint] = await Promise.all([
+            geminiService.getGeminiCreativeSoul(concept, history, files, domainSpecs),
+            pythonArchitectService.getPythonBlueprint(uiSelections, domainSpecs)
+        ]);
+        
         const arabicVisionForUser = geminiReport.visionArabic;
         const englishPayloadForBots = [
             `TECHNICAL: ${geminiReport.technicalReport || "N/A"}`,
             `VISUAL: ${geminiReport.visualReport || "N/A"}`,
             `MATERIAL: ${geminiReport.materialReport || "N/A"}`
         ].join("\n");
-
-        // ---------------------------------------------------------
-        // ⚙️ المحطة الثانية: محرك البايثون (كتالوج القواعد)
-        // ---------------------------------------------------------
-        console.log("🐍 [BOARD]: محرك بايثون يبني الأساس الهندسي...");
-        // التعديل الثاني: تمرير domainSpecs عشان بايثون يعرف إحنا في أي مجال
-        const pythonBlueprint = await pythonArchitectService.getPythonBlueprint(uiSelections, domainSpecs);
 
         // ---------------------------------------------------------
         // 🧠 المحطة الثالثة: ورشة الخبراء (Claude & DeepSeek)

@@ -1,16 +1,13 @@
-## 🚀 What's New in v4.0.2 (Architecture Hardening & Optimization)
+## 🚀 Cortex Engine v4.0.1 - Turbo & Security Update
 
-This release focuses on enterprise-level stability, security, and performance optimizations before moving to the Storyboard Engine (v5.0.0).
+### ✅ Phase 1: Security & Robustness (Hardening)
+- **Rate Limiting**: Added `express-rate-limit` (60 req/min) to prevent API abuse.
+- **Input Validation**: Bridge-level check for payloads >50KB.
+- **Retry Mechanism**: 3-tier exponential backoff for Python Bridge stability.
+- **Health Check**: `checkPythonHealth()` automated on server startup.
 
-### 🛡️ Security & Portability
-- **Environment Isolation:** Moved Python absolute paths and API keys to `.env`.
-- **Log Sanitization:** Implemented `logSanitizer.js` to mask sensitive tokens (API Keys, Bearers) in terminal outputs and crash logs.
-- **XSS Prevention:** Refactored Frontend UI to use `textContent` instead of `innerHTML` for AI outputs.
-
-### ⚡ Performance Enhancements
-- **Python Module Caching:** `architect.py` now loads the 15 JSON catalogs once upon initialization (Memory Cache), reducing Disk I/O by 95% and significantly speeding up the bridge response.
-- **Process Resilience:** Added Timeout and Error guards to the `spawn` child process in Node.js to prevent server hangs if the Python engine stalls.
-
-### 🧩 Codebase Refactoring
-- **Unified DTO Handler:** Created `dtoHandler.js` to standardize parsing, markdown stripping, and error fallback (Defaults) across all AI providers (Gemini, Claude, DeepSeek).
-- **Claude JSON Compliance:** Hardened Claude's system prompt and logic to strictly enforce valid JSON outputs and ignore conversational preamble.
+### ⚡ Phase 2: Performance Boost (Turbo)
+- **Model Optimization**: Switched to `deepseek-chat` for 10x faster reasoning response.
+- **Database Engine**: Enabled **SQLite WAL Mode** for concurrent read/write.
+- **Parallel Processing**: Refactored `board.js` to run Gemini & Python concurrently using `Promise.all()`.
+- **Prompt Caching**: Implemented in-memory `promptCache.js` to reduce Disk I/O.

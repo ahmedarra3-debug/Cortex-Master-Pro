@@ -7,6 +7,9 @@ const db = new sqlite3.Database(dbPath);
 // Enable Foreign Keys and Initialize Tables
 db.serialize(() => {
     db.run("PRAGMA foreign_keys = ON");
+    // ⚡ Enable WAL mode for better concurrency and performance
+    db.run("PRAGMA journal_mode = WAL");
+    db.run("PRAGMA synchronous = NORMAL");
 
     // Table 1: Projects
     db.run(`CREATE TABLE IF NOT EXISTS projects (

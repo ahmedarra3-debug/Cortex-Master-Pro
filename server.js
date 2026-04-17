@@ -4,9 +4,11 @@
 const express = require('express'); 
 const multer = require('multer'); 
 const fs = require('fs'); 
+const rateLimit = require('express-rate-limit');
 require('dotenv').config(); 
 const db = require('./database');
 const board = require('./services/board');
+const pythonArchitectService = require('./services/pythonArchitectService');
 const { buildProductionSpecs } = require('./services/logic/specsService');
 const app = express(); 
 
@@ -24,8 +26,20 @@ const videoScience = JSON.parse(fs.readFileSync('cortex_science.json', 'utf8'));
 app.use(express.json()); 
 app.use(express.static('public')); 
 
-// 🎬 5. الراوت الرئيسي (Cortex Engine v3.0.0 - The Visionary Director)
-app.post('/produce', upload.fields([
+// 🛡️ Rate Limiter (60 طلب/دقيقة)
+const apiLimiter = rateLimit({
+    windowMs: 60 * 1000, // دقيقة واحدة
+    max: 60, // 60 طلب كحد أقصى
+    message: {
+        success: false,
+        error: "تم تجاوز الحد المسموح (60 طلب/دقيقة). حاول مرة أخرى بعد قليل."
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// 🎬 5. الراوت الرئيسي مع Rate Limiting (Cortex Engine v4.0.1)
+app.post('/produce', apiLimiter, upload.fields([
     { name: 'refImages', maxCount: 5 }, 
     { name: 'start_frame', maxCount: 1 }, 
     { name: 'end_frame', maxCount: 1 }   
@@ -143,10 +157,15 @@ app.post('/reset', (req, res) => {
     console.log("🧹 [RADAR]: جاري عمل Reset للمنصة...");
     res.json({ success: true, message: "تمت إعادة الضبط" });
 });
-app.listen(3000, () => {
+app.listen(3000, async () => {
     console.log("--------------------------------------------------");
-    console.log("🚀 Cortex Engine v3.0.0 - The Visionary Director Ready");
+    console.log("🚀 Cortex Engine v4.0.1 - Hardened & Rate-Limited");
     console.log("--------------------------------------------------");
+    
+    // فحص صحة Python بشكل غير متزامن (لا يمنع بدء السيرفر)
+    setTimeout(async () => {
+        await checkPythonHealth();
+    }, 2000); // بعد ثانيتين من بدء السيرفر
 });
 // ============================================================================
 // 🛠️ الدالات المساعدة (Helpers - العمال المتخصصين)
@@ -184,4 +203,25 @@ function cleanupFiles(files) {
     Object.values(files).flat().forEach(f => {
         if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
     });
+}
+
+// 4. دالة فحص صحة جسر البايثون (غير متزامن)
+async function checkPythonHealth() {
+    console.log("🔍 [HEALTH CHECK]: جاري فحص جسر البايثون...");
+    try {
+        // اختبار بسيط باستخدام بيانات فارغة
+        const result = await pythonArchitectService.getPythonBlueprint({}, {});
+        if (result && result.length > 0) {
+            console.log("✅ [HEALTH CHECK]: جسر البايثون يعمل بشكل صحيح");
+            return true;
+        } else {
+            console.warn("⚠️ [HEALTH CHECK]: جسر البايثون يعمل لكن بدون إخراج متوقع");
+            return false;
+        }
+    } catch (error) {
+        console.error("❌ [HEALTH CHECK]: جسر البايثون فشل:", error.message);
+        // لا نوقف السيرفر - نستمر مع وضع متدهور
+        console.warn("⚠️ [HEALTH CHECK]: النظام سيستمر مع وضع متدهور (بدون Python Bridge)");
+        return false;
+    }
 }

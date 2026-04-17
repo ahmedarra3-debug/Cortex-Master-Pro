@@ -3,12 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const { sanitizeLogPayload } = require('./utils/logSanitizer');
 const { parseDtoResponse } = require('./utils/dtoHandler');
+const { readPromptWithCache } = require('./utils/promptCache');
 
 // سحب المفتاح السري من الـ Environment Variables
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-const geminiSystemTemplate = fs.readFileSync(
-    path.join(__dirname, '../prompts/gemini.system.txt'),
-    'utf8'
+const geminiSystemTemplate = readPromptWithCache(
+    path.join(__dirname, '../prompts/gemini.system.txt')
 );
 
 const GEMINI_DTO_DEFAULTS = Object.freeze({

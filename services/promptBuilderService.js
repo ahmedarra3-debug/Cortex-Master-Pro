@@ -1,12 +1,11 @@
-const fs = require("fs");
 const path = require("path");
 const { openai } = require("./llm/openaiClient");
 const { sanitizeLogPayload } = require("./utils/logSanitizer");
 const { parseDtoResponse } = require("./utils/dtoHandler");
+const { readPromptWithCache } = require("./utils/promptCache");
 
-const builderSystemTemplate = fs.readFileSync(
-    path.join(__dirname, "../prompts/promptBuilder.system.txt"),
-    "utf8"
+const builderSystemTemplate = readPromptWithCache(
+    path.join(__dirname, "../prompts/promptBuilder.system.txt")
 );
 
 const BUILDER_DTO_DEFAULTS = Object.freeze({
